@@ -85,7 +85,7 @@ namespace ArkanoidGame
 	// Remove all game states from the stack and add new one
 	void SwitchGameState(Game& game, GameStateType newState);
 
-	void InitGameState(Game& game, GameState& state);
+	void InitGameState(GameState& state);
 	void ShutdownGameState(Game& game, GameState& state);
 	void HandleWindowEventGameState(Game& game, GameState& state, sf::Event& event);
 	void UpdateGameState(Game& game, GameState& state, float timeDelta);

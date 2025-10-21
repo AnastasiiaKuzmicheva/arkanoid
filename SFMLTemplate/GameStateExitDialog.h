@@ -4,8 +4,7 @@
 
 namespace ArkanoidGame
 {
-	struct Game;
-
+	
 	struct GameStateExitDialogData
 	{
 		sf::Font font;
@@ -14,9 +13,9 @@ namespace ArkanoidGame
 		sf::Text hintText;
 	};
 
-	void InitGameStateExitDialog(GameStateExitDialogData& data, Game& game);
-	void ShutdownGameStateExitDialog(GameStateExitDialogData& data, Game& game);
-	void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Game& game, const sf::Event& event);
-	void UpdateGameStateExitDialog(GameStateExitDialogData& data, Game& game, float timeDelta);
-	void DrawGameStateExitDialog(GameStateExitDialogData& data, Game& game, sf::RenderWindow& window);
+	void InitGameStateExitDialog(GameStateExitDialogData& data);
+	void ShutdownGameStateExitDialog(GameStateExitDialogData& data);
+	void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, const sf::Event& event);
+	void UpdateGameStateExitDialog(GameStateExitDialogData& data, float timeDelta);
+	void DrawGameStateExitDialog(GameStateExitDialogData& data, sf::RenderWindow& window);
 }

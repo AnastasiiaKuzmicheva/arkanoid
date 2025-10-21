@@ -1,14 +1,14 @@
 #include "GameStateGameOver.h"
 #include "Application.h"
 #include <assert.h>
-#include "Game.h"
+#include "Application.h"
 #include <sstream>
 
 namespace ArkanoidGame
 {
 	const char* PLAYER_NAME = "Player";
 
-	void InitGameStateGameOver(GameStateGameOverData& data, Game& game)
+	void InitGameStateGameOver(GameStateGameOverData& data)
 	{
 		assert(data.font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
@@ -30,8 +30,8 @@ namespace ArkanoidGame
 		data.recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
 
 		std::multimap<int, std::string> sortedRecordsTable;
-		int snakeScores = game.recordsTable[PLAYER_NAME];
-		for (const auto& item : game.recordsTable)
+		int snakeScores = Application::Instance().GetGame().recordsTable[PLAYER_NAME];
+		for (const auto& item : Application::Instance().GetGame().recordsTable)
 		{
 			sortedRecordsTable.insert(std::make_pair(item.second, item.first));
 		}
@@ -71,27 +71,27 @@ namespace ArkanoidGame
 		}
 	}
 
-	void ShutdownGameStateGameOver(GameStateGameOverData& data, Game& game)
+	void ShutdownGameStateGameOver(GameStateGameOverData& data)
 	{
 		// We dont need to free resources here, because they will be freed automatically
 	}
 
-	void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, Game& game, const sf::Event& event)
+	void HandleGameStateGameOverWindowEvent(GameStateGameOverData& data, const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Space)
 			{
-				SwitchGameState(game, GameStateType::Playing);
+				SwitchGameState(Application::Instance().GetGame(), GameStateType::Playing);
 			}
 			else if (event.key.code == sf::Keyboard::Escape)
 			{
-				SwitchGameState(game, GameStateType::MainMenu);
+				SwitchGameState(Application::Instance().GetGame(), GameStateType::MainMenu);
 			}
 		}
 	}
 
-	void UpdateGameStateGameOver(GameStateGameOverData& data, Game& game, float timeDelta)
+	void UpdateGameStateGameOver(GameStateGameOverData& data, float timeDelta)
 	{
 		data.timeSinceGameOver += timeDelta;
 
@@ -99,7 +99,7 @@ namespace ArkanoidGame
 		data.gameOverText.setFillColor(gameOverTextColor);
 	}
 
-	void DrawGameStateGameOver(GameStateGameOverData& data, Game& game, sf::RenderWindow& window)
+	void DrawGameStateGameOver(GameStateGameOverData& data, sf::RenderWindow& window)
 	{
 		sf::Vector2f viewSize = window.getView().getSize();
 

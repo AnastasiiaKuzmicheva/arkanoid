@@ -39,8 +39,6 @@ namespace ArkanoidGame
 		std::array<sf::Texture, (size_t)SnakePart::Count> textures;
 	};
 
-	//struct Game;
-	//struct GameStatePlayingData;
 
 	void LoadSnakeTextures(Snake& snake);
 

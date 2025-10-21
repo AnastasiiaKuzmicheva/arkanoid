@@ -1,12 +1,12 @@
 #include "GameRecords.h"
-#include "Game.h"
+#include "Application.h"
 #include "Constants.h"
 #include <assert.h>
 #include <sstream>
 
 namespace ArkanoidGame
 {
-	void InitGameRecord(GameStateRecordsData& data, Game& game)
+	void InitGameRecord(GameStateRecordsData& data)
 	{
 		assert(data.font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
@@ -18,7 +18,7 @@ namespace ArkanoidGame
 		data.tableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
 
 		std::map<int, std::string> sortedRecordsTable;
-		for (const auto& item : game.recordsTable)
+		for (const auto& item : Application::Instance().GetGame().recordsTable)
 		{
 			sortedRecordsTable[item.second] = item.first;
 		}
@@ -39,28 +39,28 @@ namespace ArkanoidGame
 		}
 	}
 
-	void ShutdownGameStateRecords(GameStateRecordsData& data, Game& game)
+	void ShutdownGameStateRecords(GameStateRecordsData& data)
 	{
 		// Nothing to clear here
 	}
 
-	void HandleGameStateRecordsWindowEvent(GameStateRecordsData& data, Game& game, const sf::Event& event)
+	void HandleGameStateRecordsWindowEvent(GameStateRecordsData& data, const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 			{
-				PopGameState(game);
+				PopGameState(Application::Instance().GetGame());
 			}
 		}
 	}
 
-	void UpdateGameStateRecords(GameStateRecordsData& data, Game& game, float timeDelta)
+	void UpdateGameStateRecords(GameStateRecordsData& data, float timeDelta)
 	{
 
 	}
 
-	void DrawGameStateRecords(GameStateRecordsData& data, Game& game, sf::RenderWindow& window)
+	void DrawGameStateRecords(GameStateRecordsData& data, sf::RenderWindow& window)
 	{
 		data.titleText.setOrigin(GetTextOrigin(data.titleText, { 0.5f, 0.f }));
 		data.titleText.setPosition(window.getSize().x / 2.f, 100.0f);

@@ -12,7 +12,6 @@ namespace ArkanoidGame
 		sf::Sprite sprite;
 	};
 
-	struct Game;
 
 	void InitApple(Apple& apple, const sf::Texture& texture);
 	void DrawApple(Apple& apple, sf::RenderWindow& window);

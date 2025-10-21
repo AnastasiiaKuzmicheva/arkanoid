@@ -1,11 +1,11 @@
 #include "GameStateMainMenu.h"
 #include "Application.h"
-#include "Game.h"
+#include "Application.h"
 #include <assert.h>
 
 namespace ArkanoidGame
 {
-	void InitGameStateMainMenu(GameStateMainMenuData& data, Game& game)
+	void InitGameStateMainMenu(GameStateMainMenuData& data)
 	{
 		assert(data.font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
@@ -79,12 +79,12 @@ namespace ArkanoidGame
 		SelectMenuItem(data.menu, &data.startGameItem);
 	}
 
-	void ShutdownGameStateMainMenu(GameStateMainMenuData& data, Game& game)
+	void ShutdownGameStateMainMenu(GameStateMainMenuData& data)
 	{
 		// No need to do anything here
 	}
 
-	void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, Game& game, const sf::Event& event)
+	void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, const sf::Event& event)
 	{
 		if (!data.menu.selectedItem)
 		{
@@ -99,14 +99,14 @@ namespace ArkanoidGame
 			}
 			else if (event.key.code == sf::Keyboard::Enter)
 			{
-				if ((std::uint8_t)game.options & (std::uint8_t)GameModeOption::Sound)
+				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound)
 				{
 					data.soundBtnHover.play();
 				}
 
 				if (data.menu.selectedItem == &data.startGameItem)
 				{
-					SwitchGameState(game, GameStateType::Playing);
+					SwitchGameState(Application::Instance().GetGame(), GameStateType::Playing);
 				}
 				else if (data.menu.selectedItem == &data.difficultyItem)
 				{
@@ -114,27 +114,27 @@ namespace ArkanoidGame
 				}
 				else if (data.menu.selectedItem == &data.difficultyEasyItem)
 				{
-					game.difficulty = DifficultyLevel::Easy;
+					Application::Instance().GetGame().difficulty = DifficultyLevel::Easy;
 				}
 				else if (data.menu.selectedItem == &data.difficultyNormalItem)
 				{
-					game.difficulty = DifficultyLevel::Normal;
+					Application::Instance().GetGame().difficulty = DifficultyLevel::Normal;
 				}
 				else if (data.menu.selectedItem == &data.difficultyHardItem)
 				{
-					game.difficulty = DifficultyLevel::Hard;
+					Application::Instance().GetGame().difficulty = DifficultyLevel::Hard;
 				}
 				else if (data.menu.selectedItem == &data.difficultyInsaneItem)
 				{
-					game.difficulty = DifficultyLevel::Insane;
+					Application::Instance().GetGame().difficulty = DifficultyLevel::Insane;
 				}
 				else if (data.menu.selectedItem == &data.difficultyImpossibleItem)
 				{
-					game.difficulty = DifficultyLevel::Impossible;
+					Application::Instance().GetGame().difficulty = DifficultyLevel::Impossible;
 				}
 				else if (data.menu.selectedItem == &data.startGameItem)
 				{
-					SwitchGameState(game, GameStateType::Playing);
+					SwitchGameState(Application::Instance().GetGame(), GameStateType::Playing);
 				}
 				else if (data.menu.selectedItem == &data.optionsItem)
 				{
@@ -142,15 +142,15 @@ namespace ArkanoidGame
 				}
 				else if (data.menu.selectedItem == &data.optionsSoundItem)
 				{
-					game.options = (GameModeOption)((std::uint8_t)game.options ^ (std::uint8_t)GameModeOption::Sound);
+					Application::Instance().GetGame().options = (GameModeOption)((std::uint8_t)Application::Instance().GetGame().options ^ (std::uint8_t)GameModeOption::Sound);
 				}
 				else if (data.menu.selectedItem == &data.optionsMusicItem)
 				{
-					game.options = (GameModeOption)((std::uint8_t)game.options ^ (std::uint8_t)GameModeOption::Music);
+					Application::Instance().GetGame().options = (GameModeOption)((std::uint8_t)Application::Instance().GetGame().options ^ (std::uint8_t)GameModeOption::Music);
 				}
 				else if (data.menu.selectedItem == &data.recordsItem)
 				{
-					PushGameState(game, GameStateType::Records, true);
+					PushGameState(Application::Instance().GetGame(), GameStateType::Records, true);
 				}
 				else if (data.menu.selectedItem == &data.exitGameItem)
 				{
@@ -158,7 +158,7 @@ namespace ArkanoidGame
 				}
 				else if (data.menu.selectedItem == &data.yesItem)
 				{
-					SwitchGameState(game, GameStateType::None);
+					SwitchGameState(Application::Instance().GetGame(), GameStateType::None);
 				}
 				else if (data.menu.selectedItem == &data.noItem)
 				{
@@ -184,22 +184,22 @@ namespace ArkanoidGame
 		}
 	}
 
-	void UpdateGameStateMainMenu(GameStateMainMenuData& data, Game& game, float timeDelta)
+	void UpdateGameStateMainMenu(GameStateMainMenuData& data, float timeDelta)
 	{
-		data.difficultyEasyItem.text.setString(L"Лёгкий: " + std::wstring(game.difficulty == DifficultyLevel::Easy ? L"Вкл" : L"Выкл"));
-		data.difficultyNormalItem.text.setString(L"Нормальный: " + std::wstring(game.difficulty == DifficultyLevel::Normal ? L"Вкл" : L"Выкл"));
-		data.difficultyHardItem.text.setString(L"Сложный: " + std::wstring(game.difficulty == DifficultyLevel::Hard ? L"Вкл" : L"Выкл"));
-		data.difficultyInsaneItem.text.setString(L"Безумный: " + std::wstring(game.difficulty == DifficultyLevel::Insane ? L"Вкл" : L"Выкл"));
-		data.difficultyImpossibleItem.text.setString(L"Невозможный: " + std::wstring(game.difficulty == DifficultyLevel::Impossible ? L"Вкл" : L"Выкл"));
+		data.difficultyEasyItem.text.setString(L"Лёгкий: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Easy ? L"Вкл" : L"Выкл"));
+		data.difficultyNormalItem.text.setString(L"Нормальный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Normal ? L"Вкл" : L"Выкл"));
+		data.difficultyHardItem.text.setString(L"Сложный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Hard ? L"Вкл" : L"Выкл"));
+		data.difficultyInsaneItem.text.setString(L"Безумный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Insane ? L"Вкл" : L"Выкл"));
+		data.difficultyImpossibleItem.text.setString(L"Невозможный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Impossible ? L"Вкл" : L"Выкл"));
 
-		bool isSound = ((std::uint8_t)game.options & (std::uint8_t)GameModeOption::Sound);
+		bool isSound = ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound);
 		data.optionsSoundItem.text.setString(L"Звук: " + std::wstring(isSound ? L"Вкл" : L"Выкл"));
 
-		bool isMusic = ((std::uint8_t)game.options & (std::uint8_t)GameModeOption::Music);
+		bool isMusic = ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Music);
 		data.optionsMusicItem.text.setString(L"Музыка: " + std::wstring(isMusic ? L"Вкл" : L"Выкл"));
 	}
 
-	void DrawGameStateMainMenu(GameStateMainMenuData& data, Game& game, sf::RenderWindow& window)
+	void DrawGameStateMainMenu(GameStateMainMenuData& data, sf::RenderWindow& window)
 	{
 		sf::Vector2f viewSize = (sf::Vector2f)window.getSize();
 

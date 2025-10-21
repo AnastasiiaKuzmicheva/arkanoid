@@ -12,8 +12,7 @@ namespace ArkanoidGame
 		sf::Sprite sprite;
 	};
 
-	struct Game;
-
+	
 	void InitRock(Rock& rock, const sf::Texture& texture);
 	void DrawRock(Rock& rock, sf::RenderWindow& window);
 }

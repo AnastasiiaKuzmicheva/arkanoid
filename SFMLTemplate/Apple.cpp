@@ -1,6 +1,6 @@
 
 #include "Apple.h"
-#include "Game.h"
+#include "Application.h"
 #include <iostream>
 
 namespace ArkanoidGame

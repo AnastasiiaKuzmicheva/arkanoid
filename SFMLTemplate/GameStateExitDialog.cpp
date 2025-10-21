@@ -1,10 +1,10 @@
 #include "GameStateExitDialog.h"
-#include "Game.h"
+#include "Application.h"
 #include <assert.h>
 
 namespace ArkanoidGame
 {
-	void InitGameStateExitDialog(GameStateExitDialogData& data, Game& game)
+	void InitGameStateExitDialog(GameStateExitDialogData& data)
 	{
 		assert(data.font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
@@ -17,32 +17,32 @@ namespace ArkanoidGame
 		data.background.setFillColor(sf::Color(0, 0, 0, 128)); // Semi-transparent black
 	}
 
-	void ShutdownGameStateExitDialog(GameStateExitDialogData& data, Game& game)
+	void ShutdownGameStateExitDialog(GameStateExitDialogData& data)
 	{
 		// We dont need to free resources here, because they will be freed automatically
 	}
 
-	void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, Game& game, const sf::Event& event)
+	void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 			{
-				PopGameState(game);
+				PopGameState(Application::Instance().GetGame());
 			}
 			else if (event.key.code == sf::Keyboard::Enter)
 			{
-				SwitchGameState(game, GameStateType::MainMenu);
+				SwitchGameState(Application::Instance().GetGame(), GameStateType::MainMenu);
 			}
 		}
 	}
 
-	void UpdateGameStateExitDialog(GameStateExitDialogData& data, Game& game, float timeDelta)
+	void UpdateGameStateExitDialog(GameStateExitDialogData& data, float timeDelta)
 	{
 
 	}
 
-	void DrawGameStateExitDialog(GameStateExitDialogData& data, Game& game, sf::RenderWindow& window)
+	void DrawGameStateExitDialog(GameStateExitDialogData& data, sf::RenderWindow& window)
 	{
 		sf::Vector2f windowSize = (sf::Vector2f)window.getSize();
 

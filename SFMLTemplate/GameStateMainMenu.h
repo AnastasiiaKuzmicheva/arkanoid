@@ -6,7 +6,6 @@
 
 namespace ArkanoidGame
 {
-	struct Game;
 
 	struct GameStateMainMenuData
 	{

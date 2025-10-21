@@ -1,11 +1,11 @@
 #include "GameStatePlaying.h"
-#include "Game.h"
+#include "Application.h"
 #include "assert.h"
 #include <sstream>
 
 namespace ArkanoidGame
 {
-	void InitGameStatePlaying(GameStatePlayingData& data, Game& game)
+	void InitGameStatePlaying(GameStatePlayingData& data)
 	{
 		// Init game resources (terminate if error)
 		LoadSnakeTextures(data.snake);
@@ -24,7 +24,7 @@ namespace ArkanoidGame
 		data.background.setPosition(0.f, 0.f);
 		data.background.setFillColor(sf::Color(0, 200, 0));
 
-		DifficultyLevelState(data, game);
+		DifficultyLevelState(data);
 		InitPlayer(data.snake);
 
 		for (int i = 0; i < data.numApple; ++i)
@@ -53,7 +53,7 @@ namespace ArkanoidGame
 		data.inputHintText.setOrigin(GetTextOrigin(data.inputHintText, { 1.f, 0.f }));
 
 		data.soundBackground.setBuffer(data.soundBackgroundBuffer);
-		if ((std::uint8_t)game.options & (std::uint8_t)GameModeOption::Music)
+		if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Music)
 		{
 			data.soundBackground.setLoop(true);
 			data.soundBackground.play();
@@ -62,47 +62,47 @@ namespace ArkanoidGame
 		data.soundDeath.setBuffer(data.soundDeathBuffer);
 	}
 
-	void DifficultyLevelState(GameStatePlayingData& data, Game& game)
+	void DifficultyLevelState(GameStatePlayingData& data)
 	{
-		if (game.difficulty == DifficultyLevel::Easy)
+		if (Application::Instance().GetGame().difficulty == DifficultyLevel::Easy)
 		{
 			data.snake.speed = INITIAL_SPEED * 0.5f;
 		}
-		else if (game.difficulty == DifficultyLevel::Normal)
+		else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Normal)
 		{
 			data.snake.speed = INITIAL_SPEED;
 		}
-		else if (game.difficulty == DifficultyLevel::Hard)
+		else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Hard)
 		{
 			data.snake.speed = INITIAL_SPEED * 2.f;
 		}
-		else if (game.difficulty == DifficultyLevel::Insane)
+		else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Insane)
 		{
 			data.snake.speed = INITIAL_SPEED * 3.f;
 		}
-		else if (game.difficulty == DifficultyLevel::Impossible)
+		else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Impossible)
 		{
 			data.snake.speed = INITIAL_SPEED * 4.f;
 		}
 	}
 
-	void ShutdownGameStatePlaying(GameStatePlayingData& data, Game& game)
+	void ShutdownGameStatePlaying(GameStatePlayingData& data)
 	{
 		// We dont need to free resources here, because they will be freed automatically
 	}
 
-	void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, Game& game, const sf::Event& event)
+	void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 			{
-				PushGameState(game, GameStateType::ExitDialog, false);
+				PushGameState(Application::Instance().GetGame(), GameStateType::ExitDialog, false);
 			}
 		}
 	}
 
-	void UpdateGameStatePlaying(GameStatePlayingData& data, Game& game, float deltaTime)
+	void UpdateGameStatePlaying(GameStatePlayingData& data, float deltaTime)
 	{
 		HandleInput(data.snake);
 		UpdateInput(data.snake, deltaTime);
@@ -114,23 +114,23 @@ namespace ArkanoidGame
 			{
 				GrowSnake(data.snake);
 
-				if (game.difficulty == DifficultyLevel::Easy)
+				if (Application::Instance().GetGame().difficulty == DifficultyLevel::Easy)
 				{
 					data.numEatenApples += 1;
 				}
-				else if (game.difficulty == DifficultyLevel::Normal)
+				else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Normal)
 				{
 					data.numEatenApples += 2;
 				}
-				else if (game.difficulty == DifficultyLevel::Hard)
+				else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Hard)
 				{
 					data.numEatenApples += 3;
 				}
-				else if (game.difficulty == DifficultyLevel::Insane)
+				else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Insane)
 				{
 					data.numEatenApples += 4;
 				}
-				else if (game.difficulty == DifficultyLevel::Impossible)
+				else if (Application::Instance().GetGame().difficulty == DifficultyLevel::Impossible)
 				{
 					data.numEatenApples += 5;
 				}
@@ -139,7 +139,7 @@ namespace ArkanoidGame
 				data.apples[i].position = GetRandomPositionInScreen(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50);
 				data.snake.speed += ACCELERATION;
 
-				if ((std::uint8_t)game.options & (std::uint8_t)GameModeOption::Sound)
+				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound)
 				{
 					data.soundAppleEat.play();
 				}
@@ -156,19 +156,19 @@ namespace ArkanoidGame
 				|| CheckSpriteIntersection(*data.snake.head, data.rocks[i].sprite)) // Check collision with rocks)
 			{
 				// Find snake in records table and update his score
-				game.recordsTable[PLAYER_NAME] = std::max(game.recordsTable[PLAYER_NAME], data.numEatenApples);
+				Application::Instance().GetGame().recordsTable[PLAYER_NAME] = std::max(Application::Instance().GetGame().recordsTable[PLAYER_NAME], data.numEatenApples);
 
 				data.soundBackground.stop();
-				if ((std::uint8_t)game.options & (std::uint8_t)GameModeOption::Sound)
+				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound)
 				{
 					data.soundDeath.play();
 				}
-				PushGameState(game, GameStateType::GameOver, false);
+				PushGameState(Application::Instance().GetGame(), GameStateType::GameOver, false);
 			}
 		}
 	}
 
-	void DrawGameStatePlaying(GameStatePlayingData& data, Game& game, sf::RenderWindow& window)
+	void DrawGameStatePlaying(GameStatePlayingData& data, sf::RenderWindow& window)
 	{
 		// Draw snake
 		DrawPlayer(data.snake, window);
