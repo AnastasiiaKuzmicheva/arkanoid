@@ -53,7 +53,7 @@ namespace ArkanoidGame
 		data.inputHintText.setOrigin(GetTextOrigin(data.inputHintText, { 1.f, 0.f }));
 
 		data.soundBackground.setBuffer(data.soundBackgroundBuffer);
-		if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Music)
+		if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameOptions::Music)
 		{
 			data.soundBackground.setLoop(true);
 			data.soundBackground.play();
@@ -139,7 +139,7 @@ namespace ArkanoidGame
 				data.apples[i].position = GetRandomPositionInScreen(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50);
 				data.snake.speed += ACCELERATION;
 
-				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound)
+				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameOptions::Sound)
 				{
 					data.soundAppleEat.play();
 				}
@@ -159,7 +159,7 @@ namespace ArkanoidGame
 				Application::Instance().GetGame().recordsTable[PLAYER_NAME] = std::max(Application::Instance().GetGame().recordsTable[PLAYER_NAME], data.numEatenApples);
 
 				data.soundBackground.stop();
-				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound)
+				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameOptions::Sound)
 				{
 					data.soundDeath.play();
 				}

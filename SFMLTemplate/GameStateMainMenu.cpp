@@ -24,59 +24,149 @@ namespace ArkanoidGame
 				}
 			};
 
-		setTextParameters(data.menu.rootItem.hintText, L"Змейка", 48, sf::Color::Red);
-		data.menu.rootItem.childrenOrientation = Orientation::Vertical;
-		data.menu.rootItem.childrenAlignment = Alignment::Middle;
-		data.menu.rootItem.childrenSpacing = 10.f;
-		data.menu.rootItem.children.push_back(&data.startGameItem);
-		data.menu.rootItem.children.push_back(&data.difficultyItem);
-		data.menu.rootItem.children.push_back(&data.optionsItem);
-		data.menu.rootItem.children.push_back(&data.recordsItem);
-		data.menu.rootItem.children.push_back(&data.exitGameItem);
+		Game& game = Application::Instance().GetGame();
+		MenuItem startGame;
+		setTextParameters(startGame.text, L"Start Game", 24);
+		startGame.onPressCallback = [](MenuItem&)
+			{
+				SwitchGameState(Application::Instance().GetGame(), GameStateType::Playing);
+			};
 
-		setTextParameters(data.startGameItem.text, L"Начать игру", 24);
-		setTextParameters(data.difficultyItem.text, L"Уровень сложности", 24);
-		setTextParameters(data.optionsItem.text, L"Настройки", 24);
-		setTextParameters(data.recordsItem.text, L"Таблица рекордов", 24);
+		//MenuItem difficultyEasy;
+		setTextParameters(data.difficultyEasy.text, L"Easy: " + std::wstring(game.difficulty == DifficultyLevel::Easy ? L"On" : L"Off"), 24);
+		data.difficultyEasy.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.difficulty = DifficultyLevel::Easy;
+				item.text.setString(L"Easy: " + std::wstring(game.difficulty == DifficultyLevel::Easy ? L"On" : L"Off"));
 
-		setTextParameters(data.difficultyItem.hintText, L"Выберите уровень сложности", 48, sf::Color::Red);
-		data.difficultyItem.childrenOrientation = Orientation::Vertical;
-		data.difficultyItem.childrenAlignment = Alignment::Middle;
-		data.difficultyItem.childrenSpacing = 10.f;
-		data.difficultyItem.children.push_back(&data.difficultyEasyItem);
-		data.difficultyItem.children.push_back(&data.difficultyNormalItem);
-		data.difficultyItem.children.push_back(&data.difficultyHardItem);
-		data.difficultyItem.children.push_back(&data.difficultyInsaneItem);
-		data.difficultyItem.children.push_back(&data.difficultyImpossibleItem);
-		setTextParameters(data.difficultyEasyItem.text, L"Лёгкий: вкл/выкл", 24);
-		setTextParameters(data.difficultyNormalItem.text, L"Нормальный: On/Off", 24);
-		setTextParameters(data.difficultyHardItem.text, L"Сложный: On/Off", 24);
-		setTextParameters(data.difficultyInsaneItem.text, L"Безумный: On/Off", 24);
-		setTextParameters(data.difficultyImpossibleItem.text, L"Невозможный: On/Off", 24);
+			};
 
-		setTextParameters(data.optionsItem.hintText, L"Настройки", 48, sf::Color::Red);
-		data.optionsItem.childrenOrientation = Orientation::Vertical;
-		data.optionsItem.childrenAlignment = Alignment::Middle;
-		data.optionsItem.childrenSpacing = 10.f;
-		data.optionsItem.children.push_back(&data.optionsSoundItem);
-		data.optionsItem.children.push_back(&data.optionsMusicItem);
+		//MenuItem difficultyNormal;
+		setTextParameters(data.difficultyNormal.text, L"Normal: " + std::wstring(game.difficulty == DifficultyLevel::Normal ? L"On" : L"Off"), 24);
+		data.difficultyNormal.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.difficulty = DifficultyLevel::Normal;
+				item.text.setString(L"Normal: " + std::wstring(game.difficulty == DifficultyLevel::Normal ? L"On" : L"Off"));
+			};
 
-		setTextParameters(data.optionsSoundItem.text, L"Infinite Apples: On/Off", 24);
-		setTextParameters(data.optionsMusicItem.text, L"With Acceleration: On/Off", 24);
-		setTextParameters(data.exitGameItem.text, L"Выйти из игры", 24);
+		//MenuItem difficultyHard;
+		setTextParameters(data.difficultyHard.text, L"Hard: " + std::wstring(game.difficulty == DifficultyLevel::Hard ? L"On" : L"Off"), 24);
+		data.difficultyHard.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.difficulty = DifficultyLevel::Hard;
+				item.text.setString(L"Hard: " + std::wstring(game.difficulty == DifficultyLevel::Hard ? L"On" : L"Off"));
+			};
 
-		setTextParameters(data.exitGameItem.hintText, L"Вы уверены?", 48, sf::Color::Red);
-		data.exitGameItem.childrenOrientation = Orientation::Horizontal;
-		data.exitGameItem.childrenAlignment = Alignment::Middle;
-		data.exitGameItem.childrenSpacing = 10.f;
-		data.exitGameItem.children.push_back(&data.yesItem);
-		data.exitGameItem.children.push_back(&data.noItem);
+		//MenuItem difficultyInsane;
+		setTextParameters(data.difficultyInsane.text, L"Insane: " + std::wstring(game.difficulty == DifficultyLevel::Insane ? L"On" : L"Off"), 24);
+		data.difficultyInsane.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.difficulty = DifficultyLevel::Insane;
+				item.text.setString(L"Insane: " + std::wstring(game.difficulty == DifficultyLevel::Insane ? L"On" : L"Off"));
+			};
 
-		setTextParameters(data.yesItem.text, L"Да", 24);
-		setTextParameters(data.noItem.text, L"Нет", 24);
+		//MenuItem difficultyImpossible;
+		setTextParameters(data.difficultyImpossible.text, L"Impossible: " + std::wstring(game.difficulty == DifficultyLevel::Impossible ? L"On" : L"Off"), 24);
+		data.difficultyImpossible.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.difficulty = DifficultyLevel::Impossible;
+				item.text.setString(L"Impossible: " + std::wstring(game.difficulty == DifficultyLevel::Impossible ? L"On" : L"Off"));
+			};
 
-		InitMenuItem(data.menu.rootItem);
-		SelectMenuItem(data.menu, &data.startGameItem);
+		MenuItem difficulty;
+		setTextParameters(difficulty.text, L"Difficulty level", 24);
+		setTextParameters(difficulty.hintText, L"Choose a difficulty level", 48, sf::Color::Red);
+		difficulty.childrenOrientation = Orientation::Vertical;
+		difficulty.childrenAlignment = Alignment::Middle;
+		difficulty.childrenSpacing = 10.f;
+		difficulty.childrens.push_back(data.difficultyEasy);
+		difficulty.childrens.push_back(data.difficultyNormal);
+		difficulty.childrens.push_back(data.difficultyHard);
+		difficulty.childrens.push_back(data.difficultyInsane);
+		difficulty.childrens.push_back(data.difficultyImpossible);
+
+		bool isSound = IsEnableOptions(Application::Instance().GetGame(), GameOptions::Sound);
+		MenuItem optionsSound;
+		setTextParameters(optionsSound.text, L"Sound: " + std::wstring(isSound ? L"On" : L"Off"), 24);
+		optionsSound.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.options = (GameOptions)((std::uint8_t)game.options ^ (std::uint8_t)GameOptions::Sound);
+				bool isSound = IsEnableOptions(game, GameOptions::Sound);
+				item.text.setString(L"Sound: " + std::wstring(isSound ? L"On" : L"Off"));
+			};
+
+		bool isMusic = IsEnableOptions(Application::Instance().GetGame(), GameOptions::Music);
+		MenuItem optionsMusic;
+		setTextParameters(optionsMusic.text, L"Music: " + std::wstring(isMusic ? L"On" : L"Off"), 24);
+		optionsMusic.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				game.options = (GameOptions)((std::uint8_t)game.options ^ (std::uint8_t)GameOptions::Music);
+				bool isMusic = IsEnableOptions(game, GameOptions::Music);
+				item.text.setString(L"Music: " + std::wstring(isMusic ? L"On" : L"Off"));
+			};
+
+		MenuItem options;
+		setTextParameters(options.text, L"Options", 24);
+		setTextParameters(options.hintText, L"Options", 48, sf::Color::Red);
+		options.childrenOrientation = Orientation::Vertical;
+		options.childrenAlignment = Alignment::Middle;
+		options.childrenSpacing = 10.f;
+
+		options.childrens.push_back(optionsSound);
+		options.childrens.push_back(optionsMusic);
+
+		MenuItem records;
+		setTextParameters(records.text, L"Leaderboard", 24);
+		records.onPressCallback = [](MenuItem&)
+			{
+				PushGameState(Application::Instance().GetGame(), GameStateType::Records, true);
+			};
+
+		MenuItem yesItem;
+		setTextParameters(yesItem.text, L"Yes", 24);
+		yesItem.onPressCallback = [](MenuItem&)
+			{
+				SwitchGameState(Application::Instance().GetGame(), GameStateType::None);
+			};
+
+		MenuItem noItem;
+		setTextParameters(noItem.text, L"No", 24);
+		noItem.onPressCallback = [&data](MenuItem&)
+			{
+				data.menu.GoBack();
+			};
+
+		MenuItem exitGame;
+		setTextParameters(exitGame.text, L"Quit game", 24);
+
+		setTextParameters(exitGame.hintText, L"Quit game?", 48, sf::Color::Red);
+		exitGame.childrenOrientation = Orientation::Horizontal;
+		exitGame.childrenAlignment = Alignment::Middle;
+		exitGame.childrenSpacing = 10.f;
+		exitGame.childrens.push_back(yesItem);
+		exitGame.childrens.push_back(noItem);
+
+		MenuItem mainMenu;
+		setTextParameters(mainMenu.hintText, L"Arkanoid", 48, sf::Color::Red);
+		mainMenu.childrenOrientation = Orientation::Vertical;
+		mainMenu.childrenAlignment = Alignment::Middle;
+		mainMenu.childrenSpacing = 10.f;
+		mainMenu.childrens.push_back(startGame);
+		mainMenu.childrens.push_back(difficulty);
+		mainMenu.childrens.push_back(options);
+		mainMenu.childrens.push_back(records);
+		mainMenu.childrens.push_back(exitGame);
+
+		data.menu.Init(mainMenu);
+
+		
 	}
 
 	void ShutdownGameStateMainMenu(GameStateMainMenuData& data)
@@ -86,128 +176,58 @@ namespace ArkanoidGame
 
 	void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, const sf::Event& event)
 	{
-		if (!data.menu.selectedItem)
-		{
-			return;
-		}
+		Game& game = Application::Instance().GetGame();
 
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 			{
-				CollapseSelectedItem(data.menu);
+				data.menu.GoBack();
 			}
 			else if (event.key.code == sf::Keyboard::Enter)
 			{
-				if ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound)
+				if (IsEnableOptions(game, GameOptions::Sound))
 				{
 					data.soundBtnHover.play();
 				}
 
-				if (data.menu.selectedItem == &data.startGameItem)
-				{
-					SwitchGameState(Application::Instance().GetGame(), GameStateType::Playing);
-				}
-				else if (data.menu.selectedItem == &data.difficultyItem)
-				{
-					ExpandSelectedItem(data.menu);
-				}
-				else if (data.menu.selectedItem == &data.difficultyEasyItem)
-				{
-					Application::Instance().GetGame().difficulty = DifficultyLevel::Easy;
-				}
-				else if (data.menu.selectedItem == &data.difficultyNormalItem)
-				{
-					Application::Instance().GetGame().difficulty = DifficultyLevel::Normal;
-				}
-				else if (data.menu.selectedItem == &data.difficultyHardItem)
-				{
-					Application::Instance().GetGame().difficulty = DifficultyLevel::Hard;
-				}
-				else if (data.menu.selectedItem == &data.difficultyInsaneItem)
-				{
-					Application::Instance().GetGame().difficulty = DifficultyLevel::Insane;
-				}
-				else if (data.menu.selectedItem == &data.difficultyImpossibleItem)
-				{
-					Application::Instance().GetGame().difficulty = DifficultyLevel::Impossible;
-				}
-				else if (data.menu.selectedItem == &data.startGameItem)
-				{
-					SwitchGameState(Application::Instance().GetGame(), GameStateType::Playing);
-				}
-				else if (data.menu.selectedItem == &data.optionsItem)
-				{
-					ExpandSelectedItem(data.menu);
-				}
-				else if (data.menu.selectedItem == &data.optionsSoundItem)
-				{
-					Application::Instance().GetGame().options = (GameModeOption)((std::uint8_t)Application::Instance().GetGame().options ^ (std::uint8_t)GameModeOption::Sound);
-				}
-				else if (data.menu.selectedItem == &data.optionsMusicItem)
-				{
-					Application::Instance().GetGame().options = (GameModeOption)((std::uint8_t)Application::Instance().GetGame().options ^ (std::uint8_t)GameModeOption::Music);
-				}
-				else if (data.menu.selectedItem == &data.recordsItem)
-				{
-					PushGameState(Application::Instance().GetGame(), GameStateType::Records, true);
-				}
-				else if (data.menu.selectedItem == &data.exitGameItem)
-				{
-					ExpandSelectedItem(data.menu);
-				}
-				else if (data.menu.selectedItem == &data.yesItem)
-				{
-					SwitchGameState(Application::Instance().GetGame(), GameStateType::None);
-				}
-				else if (data.menu.selectedItem == &data.noItem)
-				{
-					CollapseSelectedItem(data.menu);
-				}
-				else
-				{
-					ExpandSelectedItem(data.menu);
-				}
+				data.menu.PressOnSelectedItem();
 			}
 
-			Orientation orientation = data.menu.selectedItem->parent->childrenOrientation;
+			Orientation orientation = data.menu.GetCurrentContext().childrenOrientation;
 			if (orientation == Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
 				orientation == Orientation::Horizontal && event.key.code == sf::Keyboard::Left)
 			{
-				SelectPreviousMenuItem(data.menu);
+				data.menu.SwitchToPreviousMenuItem();
 			}
 			else if (orientation == Orientation::Vertical && event.key.code == sf::Keyboard::Down ||
 				orientation == Orientation::Horizontal && event.key.code == sf::Keyboard::Right)
 			{
-				SelectNextMenuItem(data.menu);
+				data.menu.SwitchToNextMenuItem();
 			}
 		}
 	}
 
 	void UpdateGameStateMainMenu(GameStateMainMenuData& data, float timeDelta)
 	{
-		data.difficultyEasyItem.text.setString(L"Лёгкий: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Easy ? L"Вкл" : L"Выкл"));
-		data.difficultyNormalItem.text.setString(L"Нормальный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Normal ? L"Вкл" : L"Выкл"));
-		data.difficultyHardItem.text.setString(L"Сложный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Hard ? L"Вкл" : L"Выкл"));
-		data.difficultyInsaneItem.text.setString(L"Безумный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Insane ? L"Вкл" : L"Выкл"));
-		data.difficultyImpossibleItem.text.setString(L"Невозможный: " + std::wstring(Application::Instance().GetGame().difficulty == DifficultyLevel::Impossible ? L"Вкл" : L"Выкл"));
+		Game& game = Application::Instance().GetGame();
+		data.difficultyEasy.text.setString(L"Easy: " + std::wstring(game.difficulty == DifficultyLevel::Easy ? L"On" : L"Off"));
+		data.difficultyNormal.text.setString(L"Normal: " + std::wstring(game.difficulty == DifficultyLevel::Normal ? L"On" : L"Off"));
+		data.difficultyHard.text.setString(L"Hard: " + std::wstring(game.difficulty != DifficultyLevel::Hard ? L"On" : L"Off"));
+		data.difficultyInsane.text.setString(L"Insane: " + std::wstring(game.difficulty != DifficultyLevel::Insane ? L"On" : L"Off"));
+		data.difficultyImpossible.text.setString(L"Impossible: " + std::wstring(game.difficulty != DifficultyLevel::Impossible ? L"On" : L"Off"));
 
-		bool isSound = ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Sound);
-		data.optionsSoundItem.text.setString(L"Звук: " + std::wstring(isSound ? L"Вкл" : L"Выкл"));
-
-		bool isMusic = ((std::uint8_t)Application::Instance().GetGame().options & (std::uint8_t)GameModeOption::Music);
-		data.optionsMusicItem.text.setString(L"Музыка: " + std::wstring(isMusic ? L"Вкл" : L"Выкл"));
 	}
 
 	void DrawGameStateMainMenu(GameStateMainMenuData& data, sf::RenderWindow& window)
 	{
 		sf::Vector2f viewSize = (sf::Vector2f)window.getSize();
 
-		sf::Text* hintText = &GetCurrentMenuContext(data.menu)->hintText;
+		sf::Text* hintText = &data.menu.GetCurrentContext().hintText;
 		hintText->setOrigin(GetTextOrigin(*hintText, { 0.5f, 0.f }));
 		hintText->setPosition(viewSize.x / 2.f, 150.f);
 		window.draw(*hintText);
 
-		DrawMenu(data.menu, window, viewSize / 2.f, { 0.5f, 0.f });
+		data.menu.Draw(window, viewSize / 2.f, { 0.5f, 0.f });
 	}
 }

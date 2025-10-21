@@ -1,8 +1,9 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include "Math.h"
+#include <functional>
 #include <list>
+#include "Math.h"
 
 namespace ArkanoidGame
 {
@@ -18,27 +19,35 @@ namespace ArkanoidGame
 		sf::Color deselectedColor = sf::Color::White;
 
 		bool isEnabled = true;
-		std::vector<MenuItem*> children;
+		std::vector<MenuItem> childrens;
+
+		std::function<void(MenuItem& item)> onPressCallback;
 
 		MenuItem* parent = nullptr;
 	};
 
-	struct Menu
+	class Menu
 	{
+	public:
+		void Init(const MenuItem& item);
+		void Update(float deltaTime);
+		void Draw(sf::RenderWindow& window, sf::Vector2f position, sf::Vector2f origin);
+		void PressOnSelectedItem(); //press on selected menu item
+		void GoBack(); //go back to previous menu
+		void SwitchToPreviousMenuItem();
+		void SwitchToNextMenuItem();
+
+
+
+		MenuItem& GetCurrentContext();
+
+	private:
+		void InitMenuItem(MenuItem& menu);
+		void SelectMenuItem(MenuItem& item);
+
 		MenuItem rootItem;
 		MenuItem* selectedItem = nullptr;
 	};
 
-	// Links children to parent
-	void InitMenuItem(MenuItem& menu);
-	void SelectMenuItem(Menu& menu, MenuItem* item);
-	bool SelectPreviousMenuItem(Menu& menu);
-	bool SelectNextMenuItem(Menu& menu);
-	bool ExpandSelectedItem(Menu& menu);
-	bool CollapseSelectedItem(Menu& menu);
-
-	MenuItem* GetCurrentMenuContext(Menu& menu);
-
-	void DrawMenu(Menu& menu, sf::RenderWindow& window, sf::Vector2f position, sf::Vector2f origin);
 }
 

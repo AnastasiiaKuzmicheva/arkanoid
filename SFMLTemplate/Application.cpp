@@ -10,7 +10,7 @@ namespace ArkanoidGame
 	}
 
 	Application::Application() :
-		window(sf::VideoMode(ArkanoidGame::SCREEN_WIDTH, ArkanoidGame::SCREEN_HEIGHT), "ArkanoidGame")
+		window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), GAME_NAME)
 	{
 		//init random number generator
 		unsigned int seed = (unsigned int)time(nullptr); //get current time as seed. Yoy can also use any number to fix randomization

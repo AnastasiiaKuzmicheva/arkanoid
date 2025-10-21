@@ -43,7 +43,7 @@ namespace ArkanoidGame
 
 			if (game.gameStateStack.size() > 0)
 			{
-				HandleWindowEventGameState(game, game.gameStateStack.back(), event);
+				HandleWindowEventGameState(game.gameStateStack.back(), event);
 			}
 		}
 	}
@@ -55,7 +55,7 @@ namespace ArkanoidGame
 			// Shutdown all game states
 			while (game.gameStateStack.size() > 0)
 			{
-				ShutdownGameState(game, game.gameStateStack.back());
+				ShutdownGameState(game.gameStateStack.back());
 				game.gameStateStack.pop_back();
 			}
 		}
@@ -64,7 +64,7 @@ namespace ArkanoidGame
 			// Shutdown only current game state
 			if (game.gameStateStack.size() > 0)
 			{
-				ShutdownGameState(game, game.gameStateStack.back());
+				ShutdownGameState(game.gameStateStack.back());
 				game.gameStateStack.pop_back();
 			}
 		}
@@ -115,7 +115,7 @@ namespace ArkanoidGame
 		// Shutdown all game states
 		while (game.gameStateStack.size() > 0)
 		{
-			ShutdownGameState(game, game.gameStateStack.back());
+			ShutdownGameState(game.gameStateStack.back());
 			game.gameStateStack.pop_back();
 		}
 
@@ -185,7 +185,7 @@ namespace ArkanoidGame
 		}
 	}
 
-	void ShutdownGameState(Game& game, GameState& state)
+	void ShutdownGameState(GameState& state)
 	{
 		switch (state.type)
 		{
@@ -227,7 +227,7 @@ namespace ArkanoidGame
 		state.data = nullptr;
 	}
 
-	void HandleWindowEventGameState(Game& game, GameState& state, sf::Event& event)
+	void HandleWindowEventGameState(GameState& state, sf::Event& event)
 	{
 		switch (state.type)
 		{
@@ -330,6 +330,18 @@ namespace ArkanoidGame
 			assert(false); // We want to know if we forgot to implement new game statee
 			break;
 		}
+	}
+
+	bool IsEnableOptions(const Game& game, GameOptions options)
+	{
+		bool isEnable = ((std::uint8_t)game.options & (std::uint8_t)options) != (std::uint8_t)GameOptions::Empty;
+		return isEnable;
+	}
+
+	bool IsEnableDifficultyLevel(const Game& game, DifficultyLevel level)
+	{
+		bool isEnable = (std::uint8_t)game.difficulty & (std::uint8_t)level;
+		return isEnable;
 	}
 }
 

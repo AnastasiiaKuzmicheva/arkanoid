@@ -29,4 +29,6 @@ namespace ArkanoidGame
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some SPP
 
+	const std::string GAME_NAME = "ArkanoidGame";
+
 }
