@@ -9,10 +9,19 @@
 namespace ArkanoidGame
 {
 	
-	struct GameStatePlayingData
+	class Game;
+
+	class GameStatePlayingData
 	{
+	public:
+		void Init();
+		void HandleWindowEvent(const sf::Event& event);
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
+
+	private:
 		//Resources
-		sf::Texture playerTexture;
+	
 		sf::Texture appleTexture;
 		sf::Texture rockTexture;
 
@@ -24,12 +33,10 @@ namespace ArkanoidGame
 
 		//Game data
 		Snake snake;
-		Apple apple;
-		Rock rocks[NUM_ROCKS];
-		std::vector<Apple> apples;
+		sf::Sprite apple;
+		std::vector<sf::Sprite> rocks;
 		int numApple = 5;
 		int numEatenApples = 0;
-		bool isGameFinished = false;
 
 		// UI data
 		sf::Text scoreText;
@@ -42,11 +49,4 @@ namespace ArkanoidGame
 		sf::Sound soundBackground;
 	};
 
-	void InitGameStatePlaying(GameStatePlayingData& data);
-	void ShutdownGameStatePlaying(GameStatePlayingData& data);
-	void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, const sf::Event& event);
-	void UpdateGameStatePlaying(GameStatePlayingData& data, float deltaTime);
-	void DrawGameStatePlaying(GameStatePlayingData& data, sf::RenderWindow& window);
-
-	void DifficultyLevelState(GameStatePlayingData& data);
 }

@@ -1,53 +1,27 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <unordered_map>
 #include "Constants.h"
 #include "Math.h"
+#include "GameState.h"
 #include "Sprite.h"
 #include "Snake.h"
 #include "Apple.h"
 #include "Rock.h"
-#include <iostream>
-#include <unordered_map>
 
 namespace ArkanoidGame
 {
 	enum class GameOptions : std::uint8_t
 	{
-		Sound = 1 << 0,
-		Music = 1 << 1,
+		InfiniteApples = 1 << 0,
+		WithAcceleration = 1 << 1,
 
-		Default = Sound | Music,
+		Default = InfiniteApples | WithAcceleration,
 		Empty = 0
 	};
 
-	enum class DifficultyLevel : std::uint8_t
-	{
-		Easy,
-		Normal,
-		Hard,
-		Insane,
-		Impossible,
-	};
-
-	enum class GameStateType
-	{
-		None = 0,
-		MainMenu,
-		Playing,
-		GameOver,
-		ExitDialog,
-		Records
-	};
-
-	struct GameState
-	{
-		GameStateType type = GameStateType::None;
-		void* data = nullptr;
-		bool isExclusivelyVisible = false;
-	};
-
+	
 	enum class GameStateChangeType
 	{
 		None,
@@ -56,42 +30,45 @@ namespace ArkanoidGame
 		Switch
 	};
 
-	struct Game
+	class Game
 	{
-		std::vector<GameState> gameStateStack;
-		GameStateChangeType gameStateChangeType = GameStateChangeType::None;
-		GameStateType pendingGameStateType = GameStateType::None;
-		bool pendingGameStateIsExclusivelyVisible = false;
+	public:
+		using RecordsTable = std::unordered_map<std::string, int>;
+
+		Game();
+		~Game();
+
+		void HandleWindowEvents(sf::RenderWindow& window);
+		bool Update(float deltaTime); //return false if game should be closed
+		void Draw(sf::RenderWindow& window);
+		void Shutdown();
+
+		bool IsEnableOptions(GameOptions option) const;
+		void SetOption(GameOptions option, bool value);
+
+		const RecordsTable& GetRecordsTable() const { return recordsTable; }
+		int GetRecordByPlayerId(const std::string& playerId) const;
+		void UpdateRecord(const std::string& playerId, int score);
+
+		//add new game state on top of the stack
+		void PushState(GameStateType stateType, bool isExclusivelyVisible);
+
+		// Remove current game state from the stack
+		void PopState();
+
+		// Remove all game states from the stack and add new one
+		void SwitchStateTo(GameStateType newState);
+
+	private:
+		std::vector<GameState> stateStack;
+		GameStateChangeType stateChangeType = GameStateChangeType::None;
+		GameStateType pendingStateType = GameStateType::None;
+		bool pendingStateIsExclusivelyVisible = false;
 
 		GameOptions options = GameOptions::Default;
-		DifficultyLevel difficulty = DifficultyLevel::Normal;
-
-		std::unordered_map<std::string, int> recordsTable;
+		RecordsTable recordsTable;		
 
 	};
 
-	void InitGame(Game& game);
-	void HandleWindowEvents(Game& game, sf::RenderWindow& window);
-	bool UpdateGame(Game& game, float deltaTime);
-	void DrawGame(Game& game, sf::RenderWindow& window);
-	void ShutdownGame(Game& game);
-
-	// Add new game state on top of the stack
-	void PushGameState(Game& game, GameStateType stateType, bool isExclusivelyVisible);
-
-	// Remove current game state from the stack
-	void PopGameState(Game& game);
-
-	// Remove all game states from the stack and add new one
-	void SwitchGameState(Game& game, GameStateType newState);
-
-	void InitGameState(GameState& state);
-	void ShutdownGameState(GameState& state);
-	void HandleWindowEventGameState(GameState& state, sf::Event& event);
-	void UpdateGameState(Game& game, GameState& state, float timeDelta);
-	void DrawGameState(Game& game, GameState& state, sf::RenderWindow& window);
-
-	bool IsEnableOptions(const Game& game, GameOptions options);
-	bool IsEnableDifficultyLevel(const Game& game, DifficultyLevel level);
 }
 

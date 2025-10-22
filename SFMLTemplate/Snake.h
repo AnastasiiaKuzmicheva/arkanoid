@@ -24,34 +24,38 @@ namespace ArkanoidGame
 		Count
 	};
 
-	struct Snake
+	class Snake
 	{
-		std::list<sf::Sprite> body;
-		std::list<sf::Sprite>::iterator head;
-		std::list<sf::Sprite>::iterator tail;
+	public:
+		void Init();
+		void LoadTextures();
+		void Move(float deltaTime);
+		void Grow();
+		void Draw(sf::RenderWindow& window);
 
-		//Position2D position;
-		float speed = INITIAL_SPEED;
+		bool HasCollisionWithRect(const sf::FloatRect& rect);
+		bool CheckCollisionWithHimself();
+		bool CheckCollisionWithSprite(const sf::Sprite& sprite);
+
+		void SetDirection(SnakeDirection newDirection) { direction = newDirection; }
+		void SetSpeed(float value) { speed = value; }
+
+		std::list<sf::Sprite> GetBody() const { return body; }
+		std::list<sf::Sprite>::iterator GetTail() { return body.begin(); }
+		std::list<sf::Sprite>::iterator GetHead() { return --body.end(); }
+		float GetSpeed() const { return speed; }
+		SnakeDirection GetDirection() const { return direction; }
+
+	private:
+		sf::Vector2f GetDirectionVector(SnakeDirection direction);
+		void UpdateHeadSprite();
+		void UpdateTailSprite();
+		sf::Sprite GetRotationSprite(SnakeDirection olddirection, SnakeDirection newDirection);
+	private:
+		std::list<sf::Sprite> body;
+		float speed = 0.f; //pixels per second
 		SnakeDirection direction = SnakeDirection::Up;
 		SnakeDirection prevDirection = SnakeDirection::Up;
-		//sf::Sprite sprite;
-
 		std::array<sf::Texture, (size_t)SnakePart::Count> textures;
 	};
-
-
-	void LoadSnakeTextures(Snake& snake);
-
-	void InitPlayer(Snake& snake);
-	void GrowSnake(Snake& snake);
-	void DrawPlayer(Snake& snake, sf::RenderWindow& window);
-
-	void HandleInput(Snake& snake);
-	void UpdateInput(Snake& snake, float deltaTime);
-
-	bool HasSnakeCollisionWithRect(const Snake& snake, const sf::FloatRect& rect);
-	bool CheckSnakeCollisionWithHimself(Snake& snake);
-	bool CheckSnakeCollisionWithSprite(Snake& snake, const sf::Sprite& sprite);
-
-	sf::Vector2f GetDirectionVector(SnakeDirection direction);
 }

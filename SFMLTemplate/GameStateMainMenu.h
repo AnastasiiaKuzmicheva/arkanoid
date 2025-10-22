@@ -6,28 +6,21 @@
 
 namespace ArkanoidGame
 {
-	struct Game;
+	class Game;
 
-	struct GameStateMainMenuData
+	class GameStateMainMenuData
 	{
+	public:
+		void Init();
+		void HandleWindowEvent(const sf::Event& event);
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
+	private:
 		sf::Font font;
-
-		MenuItem difficultyEasy;
-		MenuItem difficultyNormal;
-		MenuItem difficultyHard;
-		MenuItem difficultyInsane;
-		MenuItem difficultyImpossible;
-
 		Menu menu;
-
 		sf::SoundBuffer soundBtnHoverBuffer;
 		sf::Sound soundBtnHover;
 	};
 
-	void InitGameStateMainMenu(GameStateMainMenuData& data);
-	void ShutdownGameStateMainMenu(GameStateMainMenuData& data);
-	void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, const sf::Event& event);
-	void UpdateGameStateMainMenu(GameStateMainMenuData& data, float timeDelta);
-	void DrawGameStateMainMenu(GameStateMainMenuData& data, sf::RenderWindow& window);
 }
 

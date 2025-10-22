@@ -16,7 +16,7 @@ namespace ArkanoidGame
 	const unsigned int INITIAL_SNAKE_SIZE = 3;
 	const float INITIAL_SPEED = 50.0f; //Pixels per second
 	const float ACCELERATION = 10.0f;
-
+	const int MAX_APPLES = 80;
 	const float APPLE_SIZE = 20.0f;
 	//const int NUM_APPLES = 10;
 	//int numApple = 15;

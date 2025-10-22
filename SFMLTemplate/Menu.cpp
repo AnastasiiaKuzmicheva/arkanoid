@@ -97,6 +97,10 @@ namespace ArkanoidGame
 		}
 		
 	}
+	void Update(float deltaTime)
+	{
+
+	}
 
 	void Menu::SwitchToNextMenuItem()
 	{

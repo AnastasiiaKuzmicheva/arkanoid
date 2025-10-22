@@ -5,17 +5,18 @@
 namespace ArkanoidGame
 {
 	
-	struct GameStateExitDialogData
+	class GameStateExitDialogData
 	{
+	public:
+		void Init();
+		void HandleWindowEvent(const sf::Event& event);
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
+
+	private:
 		sf::Font font;
 
 		sf::RectangleShape background;
 		sf::Text hintText;
 	};
-
-	void InitGameStateExitDialog(GameStateExitDialogData& data);
-	void ShutdownGameStateExitDialog(GameStateExitDialogData& data);
-	void HandleGameStateExitDialogWindowEvent(GameStateExitDialogData& data, const sf::Event& event);
-	void UpdateGameStateExitDialog(GameStateExitDialogData& data, float timeDelta);
-	void DrawGameStateExitDialog(GameStateExitDialogData& data, sf::RenderWindow& window);
 }
