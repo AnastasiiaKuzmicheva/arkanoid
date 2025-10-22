@@ -1,10 +1,6 @@
 #pragma once
-
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
-#include "Apple.h"
-#include "Rock.h"
-#include "Snake.h"
 
 namespace ArkanoidGame
 {
@@ -31,20 +27,12 @@ namespace ArkanoidGame
 
 		sf::Font font;
 
-		//Game data
-		Snake snake;
-		sf::Sprite apple;
-		std::vector<sf::Sprite> rocks;
-		int numApple = 5;
-		int numEatenApples = 0;
-
 		// UI data
 		sf::Text scoreText;
 		sf::Text inputHintText;
 		sf::RectangleShape background;
 
 		//Sound
-		sf::Sound soundAppleEat;
 		sf::Sound soundDeath;
 		sf::Sound soundBackground;
 	};

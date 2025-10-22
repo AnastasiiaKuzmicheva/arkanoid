@@ -1,14 +1,13 @@
+#include <assert.h>
 #include "GameStateMainMenu.h"
 #include "Application.h"
-#include "Application.h"
-#include <assert.h>
+#include "Game.h"
 
 namespace ArkanoidGame
 {
 	void GameStateMainMenuData::Init()
 	{
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
-
 		assert(soundBtnHoverBuffer.loadFromFile(SOUNDS_PATH + "\\menu-hover.wav"));
 
 		soundBtnHover.setBuffer(soundBtnHoverBuffer);
@@ -22,7 +21,7 @@ namespace ArkanoidGame
 			Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
 			};
 
-		const bool isInfiniteApples = Application::Instance().GetGame().IsEnableOptions(GameOptions::InfiniteApples);
+		/*const bool isInfiniteApples = Application::Instance().GetGame().IsEnableOptions(GameOptions::InfiniteApples);
 		MenuItem optionsInfiniteApplesItem;
 		optionsInfiniteApplesItem.text.setString("Infinite Apples: " + std::string(isInfiniteApples ? "On" : "Off"));
 		optionsInfiniteApplesItem.text.setFont(font);
@@ -44,7 +43,7 @@ namespace ArkanoidGame
 			bool newOptionValue = !game.IsEnableOptions(GameOptions::WithAcceleration);
 			game.SetOption(GameOptions::WithAcceleration, newOptionValue);
 			item.text.setString("With Acceleration: " + std::string(newOptionValue ? "On" : "Off"));
-			};
+			};*/
 
 
 		MenuItem options;
@@ -58,8 +57,8 @@ namespace ArkanoidGame
 		options.childrenOrientation = Orientation::Vertical;
 		options.childrenAlignment = Alignment::Middle;
 		options.childrenSpacing = 10.f;
-		options.childrens.push_back(optionsInfiniteApplesItem);
-		options.childrens.push_back(optionsWithAccelerationItem);
+		//options.childrens.push_back(optionsInfiniteApplesItem);
+		//options.childrens.push_back(optionsWithAccelerationItem);
 
 		
 		MenuItem recordsItem;

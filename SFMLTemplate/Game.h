@@ -1,14 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include <unordered_map>
 #include "Constants.h"
-#include "Math.h"
 #include "GameState.h"
 #include "Sprite.h"
-#include "Snake.h"
-#include "Apple.h"
-#include "Rock.h"
 
 namespace ArkanoidGame
 {
@@ -39,7 +34,7 @@ namespace ArkanoidGame
 		~Game();
 
 		void HandleWindowEvents(sf::RenderWindow& window);
-		bool Update(float deltaTime); //return false if game should be closed
+		bool Update(float timeDelta); // Return false if game should be closed
 		void Draw(sf::RenderWindow& window);
 		void Shutdown();
 
@@ -50,7 +45,7 @@ namespace ArkanoidGame
 		int GetRecordByPlayerId(const std::string& playerId) const;
 		void UpdateRecord(const std::string& playerId, int score);
 
-		//add new game state on top of the stack
+		// Add new game state on top of the stack
 		void PushState(GameStateType stateType, bool isExclusivelyVisible);
 
 		// Remove current game state from the stack
@@ -59,15 +54,15 @@ namespace ArkanoidGame
 		// Remove all game states from the stack and add new one
 		void SwitchStateTo(GameStateType newState);
 
+
 	private:
 		std::vector<GameState> stateStack;
 		GameStateChangeType stateChangeType = GameStateChangeType::None;
-		GameStateType pendingStateType = GameStateType::None;
-		bool pendingStateIsExclusivelyVisible = false;
+		GameStateType pendingGameStateType = GameStateType::None;
+		bool pendingGameStateIsExclusivelyVisible = false;
 
 		GameOptions options = GameOptions::Default;
-		RecordsTable recordsTable;		
-
+		RecordsTable recordsTable;
 	};
 
 }

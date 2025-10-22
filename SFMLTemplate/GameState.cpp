@@ -1,10 +1,9 @@
+#include <assert.h>
 #include "GameState.h"
 #include "GameStateMainMenu.h"
 #include "GameStatePlaying.h"
 #include "GameStateGameOver.h"
-#include "GameStateExitDialog.h"
 #include "GameRecords.h"
-#include <assert.h>
 
 namespace ArkanoidGame
 {
@@ -17,7 +16,7 @@ namespace ArkanoidGame
 		case GameStateType::MainMenu:
 		{
 			data = new GameStateMainMenuData();
-			((GameStateMainMenuData*)data);
+			((GameStateMainMenuData*)data)->Init();
 			break;
 		}
 		case GameStateType::Playing:
@@ -30,12 +29,6 @@ namespace ArkanoidGame
 		{
 			data = new GameStateGameOverData();
 			((GameStateGameOverData*)data)->Init();
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			data = new GameStateExitDialogData();
-			((GameStateExitDialogData*)data)->Init();
 			break;
 		}
 		case GameStateType::Records:
@@ -68,11 +61,6 @@ namespace ArkanoidGame
 			case GameStateType::GameOver:
 			{
 				delete ((GameStateGameOverData*)data);
-				break;
-			}
-			case GameStateType::ExitDialog:
-			{
-				delete ((GameStateExitDialogData*)data);
 				break;
 			}
 			case GameStateType::Records:
@@ -108,11 +96,6 @@ namespace ArkanoidGame
 			((GameStateGameOverData*)data)->Update(deltaTime);
 			break;
 		}
-		case GameStateType::ExitDialog:
-		{
-			((GameStateExitDialogData*)data)->Update(deltaTime);
-			break;
-		}
 		case GameStateType::Records:
 		{
 			((GameStateRecordsData*)data)->Update(deltaTime);
@@ -143,11 +126,6 @@ namespace ArkanoidGame
 			((GameStateGameOverData*)data)->Draw(window);
 			break;
 		}
-		case GameStateType::ExitDialog:
-		{
-			((GameStateExitDialogData*)data)->Draw(window);
-			break;
-		}
 		case GameStateType::Records:
 		{
 			((GameStateRecordsData*)data)->Draw(window);
@@ -176,11 +154,6 @@ namespace ArkanoidGame
 		case GameStateType::GameOver:
 		{
 			((GameStateGameOverData*)data)->HandleWindowEvent(event);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			((GameStateExitDialogData*)data)->HandleWindowEvent(event);
 			break;
 		}
 		case GameStateType::Records:
@@ -215,12 +188,6 @@ namespace ArkanoidGame
 		{
 			data = new GameStateGameOverData();
 			*((GameStateGameOverData*)data) = *(GameStateGameOverData*)state.data;
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			data = new GameStateExitDialogData();
-			*((GameStateExitDialogData*)data) = *(GameStateExitDialogData*)state.data;
 			break;
 		}
 		case GameStateType::Records:

@@ -37,7 +37,7 @@ namespace ArkanoidGame
 			}
 		}
 
-		DrawItemsList(
+		DrawTextList(
 			window,
 			texts,
 			expandedItem.childrenSpacing,
@@ -96,10 +96,6 @@ namespace ArkanoidGame
 			SelectMenuItem(*std::prev(it));
 		}
 		
-	}
-	void Update(float deltaTime)
-	{
-
 	}
 
 	void Menu::SwitchToNextMenuItem()

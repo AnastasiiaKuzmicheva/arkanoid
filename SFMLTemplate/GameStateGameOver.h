@@ -20,6 +20,7 @@ namespace ArkanoidGame
 		float timeSinceGameOver = 0.f;
 
 		// UI data
+		sf::RectangleShape background;
 		sf::Text gameOverText;
 		sf::Text hintText;
 		std::vector<sf::Text> recordsTableTexts;

@@ -1,8 +1,9 @@
+#include <assert.h>
+#include <sstream>
 #include "GameRecords.h"
 #include "Application.h"
 #include "Constants.h"
-#include <assert.h>
-#include <sstream>
+#include "Text.h"
 
 namespace ArkanoidGame
 {

@@ -158,38 +158,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Apple.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameRecords.cpp" />
     <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="GameStateExitDialog.cpp" />
     <ClCompile Include="GameStateGameOver.cpp" />
     <ClCompile Include="GameStateMainMenu.cpp" />
     <ClCompile Include="GameStatePlaying.cpp" />
-    <ClCompile Include="Math.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Rock.cpp" />
-    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Apple.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameRecords.h" />
     <ClInclude Include="GameState.h" />
-    <ClInclude Include="GameStateExitDialog.h" />
     <ClInclude Include="GameStateGameOver.h" />
     <ClInclude Include="GameStateMainMenu.h" />
     <ClInclude Include="GameStatePlaying.h" />
-    <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="Rock.h" />
-    <ClInclude Include="Snake.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

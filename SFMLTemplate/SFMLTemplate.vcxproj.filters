@@ -10,16 +10,10 @@
     <ClCompile Include="GameMain.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Apple.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="GameRecords.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStateExitDialog.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="GameStateGameOver.cpp">
@@ -31,13 +25,7 @@
     <ClCompile Include="GameStatePlaying.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Rock.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
@@ -46,17 +34,14 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Snake.cpp">
+    <ClCompile Include="GameState.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameState.cpp">
+    <ClCompile Include="Text.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Apple.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Sources</Filter>
     </ClInclude>
@@ -64,9 +49,6 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="GameRecords.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStateExitDialog.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="GameStateGameOver.h">
@@ -78,13 +60,7 @@
     <ClInclude Include="GameStatePlaying.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Rock.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
@@ -93,10 +69,13 @@
     <ClInclude Include="Sprite.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Snake.h">
+    <ClInclude Include="GameState.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="GameState.h">
+    <ClInclude Include="Text.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
