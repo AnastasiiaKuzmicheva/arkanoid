@@ -11,10 +11,17 @@ namespace ArkanoidGame
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 600;
 
-	const float INITIAL_SPEED = 50.0f; //Pixels per second
+	const float ACCELERATION = 10.f;
 	const int MAX_APPLES = 80;
 
 	const float TIME_PER_FRAME = 1.f / 60.f; // 60 fps
+
+	const unsigned int BALL_SIZE = 20;
+	const unsigned int BALL_SPEED = 400;
+
+	const unsigned int PLATFORM_WIDTH = 60;
+	const unsigned int PLATFORM_HEIGHT = 20;
+	const float PLATFORM_SPEED = 300.f;
 
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some SPP

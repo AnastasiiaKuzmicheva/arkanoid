@@ -1,9 +1,9 @@
+#include <sstream>
+#include <assert.h>
 #include "GameStatePlaying.h"
 #include "Application.h"
-#include "assert.h"
 #include "Text.h"
 #include "Game.h"
-#include <sstream>
 
 namespace ArkanoidGame
 {
@@ -19,7 +19,7 @@ namespace ArkanoidGame
 		// Init background
 		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
-		background.setFillColor(sf::Color(0, 200, 0));
+		background.setFillColor(sf::Color(0, 0, 0));
 
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
@@ -30,6 +30,9 @@ namespace ArkanoidGame
 		inputHintText.setFillColor(sf::Color::White);
 		inputHintText.setString(L"Use arrow keys to move, ESC to pause");
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
+
+		platform.Init();
+		ball.Init();
 
 		soundBackground.setBuffer(soundBackgroundBuffer);
 
@@ -51,7 +54,16 @@ namespace ArkanoidGame
 
 	void GameStatePlayingData::Update(float deltaTime)
 	{
-		const bool isGameFinished = false; 
+		platform.Update(deltaTime);
+		ball.Update(deltaTime);
+
+		const bool isCollision = platform.CheckCollisionWithBall(ball);
+		if (isCollision)
+		{
+			ball.ReboundFromPlatform();
+		}
+
+		const bool isGameFinished = !isCollision && ball.GetPosition().y > platform.GetRect().top;
 		
 		if (isGameFinished)
 		{
@@ -66,6 +78,9 @@ namespace ArkanoidGame
 	{
 		// Draw background
 		window.draw(background);
+
+		platform.Draw(window);
+		ball.Draw(window);
 
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);

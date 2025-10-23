@@ -1,9 +1,7 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
-#include "Constants.h"
 #include <list>
-//#include "Math.h"
+#include "Constants.h"
 
 namespace ArkanoidGame
 {

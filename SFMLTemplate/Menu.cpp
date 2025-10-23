@@ -1,5 +1,5 @@
-#include "Menu.h"
 #include <assert.h>
+#include "Menu.h"
 
 namespace ArkanoidGame
 {
@@ -12,6 +12,11 @@ namespace ArkanoidGame
 		{
 			SelectMenuItem(rootItem.childrens.front());
 		}
+	}
+
+	void Menu::Update(float deltaTime)
+	{
+
 	}
 
 	void Menu::InitMenuItem(MenuItem& item)
