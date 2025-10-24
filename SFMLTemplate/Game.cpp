@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "GameStatePlaying.h"
 #include "GameStateGameOver.h"
+#include "GameStatePauseMenu.h"
 #include "GameStateMainMenu.h"
 #include "GameRecords.h"
 
@@ -139,6 +140,7 @@ namespace ArkanoidGame
 		pendingGameStateIsExclusivelyVisible = false;
 		stateChangeType = GameStateChangeType::Pop;
 	}
+
 
 	void Game::SwitchStateTo(GameStateType newState)
 	{

@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <assert.h>
 #include "Platform.h"
 #include "Ball.h"
 #include "Constants.h"
@@ -13,29 +12,20 @@ namespace
 
 namespace ArkanoidGame
 {
-	void Platform::Init()
-	{
-		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + "platform.png"));
+	Platform::Platform(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + "platform.png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
+	{}
 
-		InitSprite(sprite, PLATFORM_WIDTH, PLATFORM_HEIGHT, texture);
-		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f });
-	}
-
-	void Platform::Update(float timeDelta)
+	void Platform::Update(float deltaTime)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			Move(-timeDelta * PLATFORM_SPEED);
+			Move(-deltaTime * PLATFORM_SPEED);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			Move(timeDelta * PLATFORM_SPEED);
+			Move(deltaTime * PLATFORM_SPEED);
 		}
-	}
-
-	void Platform::Draw(sf::RenderWindow& window)
-	{
-		DrawSprite(sprite, window);
 	}
 
 	void Platform::Move(float speed)
@@ -45,9 +35,10 @@ namespace ArkanoidGame
 		sprite.setPosition(position);
 	}
 
-	bool Platform::CheckCollisionWithBall(const Ball& ball)
+	bool Platform::CheckCollisionWithBall(const Ball& ball) const
 	{
-		auto sqr = [](float x) {
+		auto sqr = [](float x) 
+			{
 			return x * x;
 			};
 

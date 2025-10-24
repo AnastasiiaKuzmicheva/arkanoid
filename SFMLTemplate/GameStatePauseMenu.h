@@ -1,15 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include "GameStateData.h"
+#include "Menu.h"
 
 namespace ArkanoidGame
 {
 	class Game;
 
-	class GameStateRecordsData : public GameStateData
+	class GameStatePauseMenuData : public GameStateData
 	{
 	public:
+
 		void Init() override;
 		void HandleWindowEvent(const sf::Event& event) override;
 		void Update(float deltaTime) override;
@@ -18,9 +19,9 @@ namespace ArkanoidGame
 	private:
 		sf::Font font;
 
+		sf::RectangleShape background;
 		sf::Text titleText;
-		std::vector<sf::Text> tableTexts;
-		sf::Text hintText;
-	};
 
+		Menu menu;
+	};
 }

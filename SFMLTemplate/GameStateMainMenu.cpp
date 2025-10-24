@@ -17,34 +17,9 @@ namespace ArkanoidGame
 		startGame.text.setFont(font);
 		startGame.text.setCharacterSize(24);
 		startGame.onPressCallback = [](MenuItem&) 
-			{
+		{
 			Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
-			};
-
-		/*const bool isInfiniteApples = Application::Instance().GetGame().IsEnableOptions(GameOptions::InfiniteApples);
-		MenuItem optionsInfiniteApplesItem;
-		optionsInfiniteApplesItem.text.setString("Infinite Apples: " + std::string(isInfiniteApples ? "On" : "Off"));
-		optionsInfiniteApplesItem.text.setFont(font);
-		optionsInfiniteApplesItem.text.setCharacterSize(24);
-		optionsInfiniteApplesItem.onPressCallback = [](MenuItem& item) {
-			Game& game = Application::Instance().GetGame();
-			bool newOptionValue = !game.IsEnableOptions(GameOptions::InfiniteApples);
-			game.SetOption(GameOptions::InfiniteApples, newOptionValue);
-			item.text.setString("Infinite Apples: " + std::string(newOptionValue ? "On" : "Off"));
-			};
-
-		const bool isWithAcceleration = Application::Instance().GetGame().IsEnableOptions(GameOptions::WithAcceleration);
-		MenuItem optionsWithAccelerationItem;
-		optionsWithAccelerationItem.text.setString("With Acceleration: " + std::string(isWithAcceleration ? "On" : "Off"));
-		optionsWithAccelerationItem.text.setFont(font);
-		optionsWithAccelerationItem.text.setCharacterSize(24);
-		optionsWithAccelerationItem.onPressCallback = [](MenuItem& item) {
-			Game& game = Application::Instance().GetGame();
-			bool newOptionValue = !game.IsEnableOptions(GameOptions::WithAcceleration);
-			game.SetOption(GameOptions::WithAcceleration, newOptionValue);
-			item.text.setString("With Acceleration: " + std::string(newOptionValue ? "On" : "Off"));
-			};*/
-
+		};
 
 		MenuItem options;
 		options.text.setString("Options");
@@ -57,8 +32,6 @@ namespace ArkanoidGame
 		options.childrenOrientation = Orientation::Vertical;
 		options.childrenAlignment = Alignment::Middle;
 		options.childrenSpacing = 10.f;
-		//options.childrens.push_back(optionsInfiniteApplesItem);
-		//options.childrens.push_back(optionsWithAccelerationItem);
 
 		
 		MenuItem recordsItem;
@@ -151,7 +124,7 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateMainMenuData::Update(float timeDelta)
+	void GameStateMainMenuData::Update(float deltaTime)
 	{
 		
 	}

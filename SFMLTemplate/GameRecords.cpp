@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "Constants.h"
 #include "Text.h"
+#include "Game.h"
 
 namespace ArkanoidGame
 {
@@ -57,7 +58,7 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateRecordsData::Update(float timeDelta)
+	void GameStateRecordsData::Update(float deltaTime)
 	{
 
 	}

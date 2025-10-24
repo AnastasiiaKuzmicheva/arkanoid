@@ -9,10 +9,10 @@ namespace ArkanoidGame
 {
 	enum class GameOptions : std::uint8_t
 	{
-		InfiniteApples = 1 << 0,
-		WithAcceleration = 1 << 1,
+		Sound = 1 << 0,
+		Music = 1 << 1,
 
-		Default = InfiniteApples | WithAcceleration,
+		Default = Sound | Music,
 		Empty = 0
 	};
 
@@ -34,7 +34,7 @@ namespace ArkanoidGame
 		~Game();
 
 		void HandleWindowEvents(sf::RenderWindow& window);
-		bool Update(float timeDelta); // Return false if game should be closed
+		bool Update(float deltaTime); // Return false if game should be closed
 		void Draw(sf::RenderWindow& window);
 		void Shutdown();
 

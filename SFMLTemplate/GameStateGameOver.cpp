@@ -2,6 +2,7 @@
 #include <sstream>
 #include "GameStateGameOver.h"
 #include "Application.h"
+#include "Game.h"
 #include "Text.h"
 
 namespace ArkanoidGame
@@ -90,9 +91,9 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateGameOverData::Update(float timeDelta)
+	void GameStateGameOverData::Update(float deltaTime)
 	{
-		timeSinceGameOver += timeDelta;
+		timeSinceGameOver += deltaTime;
 
 		sf::Color gameOverTextColor = (int)timeSinceGameOver % 2 ? sf::Color::Red : sf::Color::Yellow;
 		gameOverText.setFillColor(gameOverTextColor);
