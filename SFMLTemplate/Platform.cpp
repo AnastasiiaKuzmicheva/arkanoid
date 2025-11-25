@@ -13,7 +13,7 @@ namespace
 namespace ArkanoidGame
 {
 	Platform::Platform(const sf::Vector2f& position)
-		: GameObject(TEXTURES_PATH + "platform.png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
+		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
 	{}
 
 	void Platform::Update(float deltaTime)
