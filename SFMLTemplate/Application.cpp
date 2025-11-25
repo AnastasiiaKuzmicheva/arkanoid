@@ -16,12 +16,6 @@ namespace ArkanoidGame
 		unsigned int seed = (unsigned int)time(nullptr); //get current time as seed. Yoy can also use any number to fix randomization
 		srand(seed);
 
-		InitGame(game);
-	}
-
-	Application::~Application()
-	{
-		ShutdownGame(game);
 	}
 
 	void Application::Run()
@@ -34,20 +28,20 @@ namespace ArkanoidGame
 		{
 			float startTime = gameClock.getElapsedTime().asSeconds();
 
-			HandleWindowEvents(game, window);
+			game.HandleWindowEvents(window);
 
 			if (!window.isOpen())
 			{
 				break;
 			}
 
-			if (UpdateGame(game, TIME_PER_FRAME))
+			if (game.Update(TIME_PER_FRAME))
 			{
 				//draw everithing here
 				//clear the window first
 				window.clear();
 
-				DrawGame(game, window);
+				game.Draw(window);
 
 				//end the current frame, display window contents on screen
 				window.display();

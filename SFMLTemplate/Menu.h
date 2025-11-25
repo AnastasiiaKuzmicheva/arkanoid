@@ -1,9 +1,8 @@
 #pragma once
-
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 #include <functional>
 #include <list>
-#include "Math.h"
+#include "Text.h"
 
 namespace ArkanoidGame
 {

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 
 namespace ArkanoidGame
@@ -12,19 +11,26 @@ namespace ArkanoidGame
 	const int SCREEN_WIDTH = 800;
 	const int SCREEN_HEIGHT = 600;
 
-	const float SNAKE_SIZE = 20.0f;
-	const unsigned int INITIAL_SNAKE_SIZE = 3;
-	const float INITIAL_SPEED = 50.0f; //Pixels per second
-	const float ACCELERATION = 10.0f;
-
-	const float APPLE_SIZE = 20.0f;
-	//const int NUM_APPLES = 10;
-	//int numApple = 15;
-
-	const float ROCK_SIZE = 20.0f;
-	const int NUM_ROCKS = 10;
+	const float ACCELERATION = 10.f;
+	const int MAX_APPLES = 80;
 
 	const float TIME_PER_FRAME = 1.f / 60.f; // 60 fps
+
+	const unsigned int BALL_SIZE = 30;
+	const unsigned int BALL_SPEED = 200;
+
+	const unsigned int PLATFORM_WIDTH = 60;
+	const unsigned int PLATFORM_HEIGHT = 20;
+	const float PLATFORM_SPEED = 300.f;
+
+	const unsigned int BLOCKS_COUNT_ROWS = 2;
+	const unsigned int BLOCKS_COUNT_IN_ROW = 10;
+	const unsigned int BLOCK_SHIFT = 5;
+	const unsigned int BLOCK_WIDTH = (SCREEN_WIDTH - (BLOCKS_COUNT_IN_ROW + 1) * BLOCK_SHIFT) / BLOCKS_COUNT_IN_ROW;
+	const unsigned int BLOCK_HEIGHT = 20;
+
+	const unsigned int START_Y = 50;  // Отступ сверху
+	const unsigned int ROW_HEIGHT = BLOCK_HEIGHT + BLOCK_SHIFT;
 
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some SPP

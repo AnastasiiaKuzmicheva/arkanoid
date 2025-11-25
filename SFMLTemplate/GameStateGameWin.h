@@ -1,13 +1,12 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <vector>
+#include "SFML/Graphics.hpp"
 #include "GameStateData.h"
 
 namespace ArkanoidGame
 {
 	class Game;
 
-	class GameStateRecordsData : public GameStateData
+	class GameStateGameWinData : public GameStateData
 	{
 	public:
 		void Init() override;
@@ -16,11 +15,14 @@ namespace ArkanoidGame
 		void Draw(sf::RenderWindow& window) override;
 
 	private:
+		// Resources
 		sf::Font font;
 
-		sf::Text titleText;
-		std::vector<sf::Text> tableTexts;
+		float timeSinceGameWin = 0.f;
+
+		// UI data
+		sf::RectangleShape background;
+		sf::Text gameWinText;
 		sf::Text hintText;
 	};
-
 }

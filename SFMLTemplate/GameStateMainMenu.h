@@ -1,33 +1,25 @@
 #pragma once
-
-#include "SFML/Graphics.hpp"
-#include "SFML/Audio.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "GameStateData.h"
 #include "Menu.h"
 
 namespace ArkanoidGame
 {
-	struct Game;
+	class Game;
 
-	struct GameStateMainMenuData
+	class GameStateMainMenuData : public GameStateData
 	{
+	public:
+		void Init() override;
+		void HandleWindowEvent(const sf::Event& event) override;
+		void Update(float deltaTime) override;
+		void Draw(sf::RenderWindow& window) override;
+	private:
 		sf::Font font;
-
-		MenuItem difficultyEasy;
-		MenuItem difficultyNormal;
-		MenuItem difficultyHard;
-		MenuItem difficultyInsane;
-		MenuItem difficultyImpossible;
-
 		Menu menu;
-
 		sf::SoundBuffer soundBtnHoverBuffer;
 		sf::Sound soundBtnHover;
 	};
-
-	void InitGameStateMainMenu(GameStateMainMenuData& data);
-	void ShutdownGameStateMainMenu(GameStateMainMenuData& data);
-	void HandleGameStateMainMenuWindowEvent(GameStateMainMenuData& data, const sf::Event& event);
-	void UpdateGameStateMainMenu(GameStateMainMenuData& data, float timeDelta);
-	void DrawGameStateMainMenu(GameStateMainMenuData& data, sf::RenderWindow& window);
 }
 

@@ -1,36 +1,40 @@
-#include "Game.h"
 #include <cassert>
-#include <string>
 #include <algorithm>
-#include "GameStateMainMenu.h"
+#include "Game.h"
 #include "GameStatePlaying.h"
 #include "GameStateGameOver.h"
-#include "GameStateExitDialog.h"
+#include "GameStatePauseMenu.h"
+#include "GameStateMainMenu.h"
 #include "GameRecords.h"
 
 
 namespace ArkanoidGame
 {
-	void InitGame(Game& game)
+	Game::Game()
 	{
 		// Generate fake records table
-		game.recordsTable =
+		recordsTable =
 		{
-			{"John", rand() % 10},
-			{"Jane", rand() % 10 },
-			{"Alice", rand() % 10 },
-			{"Bob", rand() % 10 },
-			{"Clementine", rand() % 10 },
+			{"John", MAX_APPLES / 2},
+			{"Jane", MAX_APPLES / 3},
+			{"Alice", MAX_APPLES / 4 },
+			{"Bob", MAX_APPLES / 5 },
+			{"Clementine", MAX_APPLES / 5 },
 		};
 
-		game.gameStateChangeType = GameStateChangeType::None;
-		game.pendingGameStateType = GameStateType::None;
-		game.pendingGameStateIsExclusivelyVisible = false;
+		stateChangeType = GameStateChangeType::None;
+		pendingGameStateType = GameStateType::None;
+		pendingGameStateIsExclusivelyVisible = false;
 
-		SwitchGameState(game, GameStateType::MainMenu);
+		SwitchStateTo(GameStateType::MainMenu);
 	}
 
-	void HandleWindowEvents(Game& game, sf::RenderWindow& window)
+	Game::~Game()
+	{
+		Shutdown();
+	}
+
+	void Game::HandleWindowEvents(sf::RenderWindow& window)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -41,63 +45,63 @@ namespace ArkanoidGame
 				window.close();
 			}
 
-			if (game.gameStateStack.size() > 0)
+			if (stateStack.size() > 0)
 			{
-				HandleWindowEventGameState(game.gameStateStack.back(), event);
+				stateStack.back().HandleWindowEvent(event);
 			}
 		}
 	}
 
-	bool UpdateGame(Game& game, float deltaTime)
+	bool Game::Update(float deltaTime)
 	{
-		if (game.gameStateChangeType == GameStateChangeType::Switch)
+		if (stateChangeType == GameStateChangeType::Switch)
 		{
 			// Shutdown all game states
-			while (game.gameStateStack.size() > 0)
+			while (stateStack.size() > 0)
 			{
-				ShutdownGameState(game.gameStateStack.back());
-				game.gameStateStack.pop_back();
+				stateStack.pop_back();
 			}
 		}
-		else if (game.gameStateChangeType == GameStateChangeType::Pop)
+		else if (stateChangeType == GameStateChangeType::Pop)
 		{
 			// Shutdown only current game state
-			if (game.gameStateStack.size() > 0)
+			if (stateStack.size() > 0)
 			{
-				ShutdownGameState(game.gameStateStack.back());
-				game.gameStateStack.pop_back();
+				stateStack.pop_back();
 			}
 		}
 
 		// Initialize new game state if needed
-		if (game.pendingGameStateType != GameStateType::None)
+		if (pendingGameStateType != GameStateType::None)
 		{
-			game.gameStateStack.push_back({ game.pendingGameStateType, nullptr, game.pendingGameStateIsExclusivelyVisible });
-			InitGameState(game.gameStateStack.back());
+			stateStack.push_back(GameState(pendingGameStateType,
+		pendingGameStateIsExclusivelyVisible));
+			
 		}
 
-		game.gameStateChangeType = GameStateChangeType::None;
-		game.pendingGameStateType = GameStateType::None;
-		game.pendingGameStateIsExclusivelyVisible = false;
+		stateChangeType = GameStateChangeType::None;
+		pendingGameStateType = GameStateType::None;
+		pendingGameStateIsExclusivelyVisible = false;
 
-		if (game.gameStateStack.size() > 0)
+		if (stateStack.size() > 0)
 		{
-			UpdateGameState(game, game.gameStateStack.back(), deltaTime);
+			stateStack.back().Update(deltaTime);
 			return true;
 		}
 
 		return false;
 	}
 
-	void DrawGame(Game& game, sf::RenderWindow& window)
+	void Game::Draw(sf::RenderWindow& window)
 	{
-		if (game.gameStateStack.size() > 0)
+
+		if (stateStack.size() > 0)
 		{
 			std::vector<GameState*> visibleGameStates;
-			for (auto it = game.gameStateStack.rbegin(); it != game.gameStateStack.rend(); ++it)
+			for (auto it = stateStack.rbegin(); it != stateStack.rend(); ++it)
 			{
 				visibleGameStates.push_back(&(*it));
-				if (it->isExclusivelyVisible)
+				if (it->IsExclusivelyVisible())
 				{
 					break;
 				}
@@ -105,243 +109,74 @@ namespace ArkanoidGame
 
 			for (auto it = visibleGameStates.rbegin(); it != visibleGameStates.rend(); ++it)
 			{
-				DrawGameState(game, **it, window);
+				(*it)->Draw(window);
 			}
 		}
 	}
 
-	void ShutdownGame(Game& game)
+	void Game::Shutdown()
 	{
 		// Shutdown all game states
-		while (game.gameStateStack.size() > 0)
+		while (stateStack.size() > 0)
 		{
-			ShutdownGameState(game.gameStateStack.back());
-			game.gameStateStack.pop_back();
+			stateStack.pop_back();
 		}
 
-		game.gameStateChangeType = GameStateChangeType::None;
-		game.pendingGameStateType = GameStateType::None;
-		game.pendingGameStateIsExclusivelyVisible = false;
+		stateChangeType = GameStateChangeType::None;
+		pendingGameStateType = GameStateType::None;
+		pendingGameStateIsExclusivelyVisible = false;
 	}
 
-	void PushGameState(Game& game, GameStateType stateType, bool isExclusivelyVisible)
+	void Game::PushState(GameStateType stateType, bool isExclusivelyVisible)
 	{
-		game.pendingGameStateType = stateType;
-		game.pendingGameStateIsExclusivelyVisible = isExclusivelyVisible;
-		game.gameStateChangeType = GameStateChangeType::Push;
+		pendingGameStateType = stateType;
+		pendingGameStateIsExclusivelyVisible = isExclusivelyVisible;
+		stateChangeType = GameStateChangeType::Push;
 	}
 
-	void PopGameState(Game& game)
+	void Game::PopState()
 	{
-		game.pendingGameStateType = GameStateType::None;
-		game.pendingGameStateIsExclusivelyVisible = false;
-		game.gameStateChangeType = GameStateChangeType::Pop;
+		pendingGameStateType = GameStateType::None;
+		pendingGameStateIsExclusivelyVisible = false;
+		stateChangeType = GameStateChangeType::Pop;
 	}
 
-	void SwitchGameState(Game& game, GameStateType newState)
+
+	void Game::SwitchStateTo(GameStateType newState)
 	{
-		game.pendingGameStateType = newState;
-		game.pendingGameStateIsExclusivelyVisible = false;
-		game.gameStateChangeType = GameStateChangeType::Switch;
+		pendingGameStateType = newState;
+		pendingGameStateIsExclusivelyVisible = false;
+		stateChangeType = GameStateChangeType::Switch;
 	}
 
-	void InitGameState(GameState& state)
+	bool Game::IsEnableOptions(GameOptions option) const
 	{
-		switch (state.type)
-		{
-		case GameStateType::MainMenu:
-		{
-			state.data = new GameStateMainMenuData();
-			InitGameStateMainMenu(*(GameStateMainMenuData*)state.data);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			state.data = new GameStatePlayingData();
-			InitGameStatePlaying(*(GameStatePlayingData*)state.data);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			state.data = new GameStateGameOverData();
-			InitGameStateGameOver(*(GameStateGameOverData*)state.data);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			state.data = new GameStateExitDialogData();
-			InitGameStateExitDialog(*(GameStateExitDialogData*)state.data);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			state.data = new GameStateRecordsData();
-			InitGameRecord(*(GameStateRecordsData*)state.data);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game statee
-			break;
-		}
-	}
-
-	void ShutdownGameState(GameState& state)
-	{
-		switch (state.type)
-		{
-		case GameStateType::MainMenu:
-		{
-			ShutdownGameStateMainMenu(*(GameStateMainMenuData*)state.data);
-			delete (GameStateMainMenuData*)state.data;
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			ShutdownGameStatePlaying(*(GameStatePlayingData*)state.data);
-			delete (GameStatePlayingData*)state.data;
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			ShutdownGameStateGameOver(*(GameStateGameOverData*)state.data);
-			delete (GameStateGameOverData*)state.data;
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			ShutdownGameStateExitDialog(*(GameStateExitDialogData*)state.data);
-			delete (GameStateExitDialogData*)state.data;
-			break;
-		}
-		case GameStateType::Records:
-		{
-			ShutdownGameStateRecords(*(GameStateRecordsData*)state.data);
-			delete (GameStateRecordsData*)state.data;
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game statee
-			break;
-		}
-
-		state.data = nullptr;
-	}
-
-	void HandleWindowEventGameState(GameState& state, sf::Event& event)
-	{
-		switch (state.type)
-		{
-		case GameStateType::MainMenu:
-		{
-			HandleGameStateMainMenuWindowEvent(*(GameStateMainMenuData*)state.data, event);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			HandleGameStatePlayingWindowEvent(*(GameStatePlayingData*)state.data, event);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			HandleGameStateGameOverWindowEvent(*(GameStateGameOverData*)state.data, event);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			HandleGameStateExitDialogWindowEvent(*(GameStateExitDialogData*)state.data, event);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			HandleGameStateRecordsWindowEvent(*(GameStateRecordsData*)state.data, event);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game statee
-			break;
-		}
-	}
-
-	void UpdateGameState(Game& game, GameState& state, float timeDelta)
-	{
-		switch (state.type)
-		{
-		case GameStateType::MainMenu:
-		{
-			UpdateGameStateMainMenu(*(GameStateMainMenuData*)state.data, timeDelta);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			UpdateGameStatePlaying(*(GameStatePlayingData*)state.data, timeDelta);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			UpdateGameStateGameOver(*(GameStateGameOverData*)state.data, timeDelta);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			UpdateGameStateExitDialog(*(GameStateExitDialogData*)state.data, timeDelta);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			UpdateGameStateRecords(*(GameStateRecordsData*)state.data, timeDelta);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game statee
-			break;
-		}
-	}
-
-	void DrawGameState(Game& game, GameState& state, sf::RenderWindow& window)
-	{
-		switch (state.type)
-		{
-		case GameStateType::MainMenu:
-		{
-			DrawGameStateMainMenu(*(GameStateMainMenuData*)state.data, window);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			DrawGameStatePlaying(*(GameStatePlayingData*)state.data, window);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			DrawGameStateGameOver(*(GameStateGameOverData*)state.data, window);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			DrawGameStateExitDialog(*(GameStateExitDialogData*)state.data, window);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			DrawGameStateRecords(*(GameStateRecordsData*)state.data, window);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game statee
-			break;
-		}
-	}
-
-	bool IsEnableOptions(const Game& game, GameOptions options)
-	{
-		bool isEnable = ((std::uint8_t)game.options & (std::uint8_t)options) != (std::uint8_t)GameOptions::Empty;
+		const bool isEnable = ((std::uint8_t)options & (std::uint8_t)option) != (std::uint8_t)GameOptions::Empty;
 		return isEnable;
 	}
-
-	bool IsEnableDifficultyLevel(const Game& game, DifficultyLevel level)
+	
+	void Game::SetOption(GameOptions option, bool value)
 	{
-		bool isEnable = (std::uint8_t)game.difficulty & (std::uint8_t)level;
-		return isEnable;
+		if (value)
+		{
+			options = (GameOptions)((std::uint8_t)options | (std::uint8_t)option);
+		}
+		else
+		{
+			options = (GameOptions)((std::uint8_t)options & ~(std::uint8_t)option);
+		}
+	}
+
+	
+	int Game::GetRecordByPlayerId(const std::string& playerId) const
+	{
+		auto it = recordsTable.find(playerId);
+		return it == recordsTable.end() ? 0 : it->second;
+	}
+
+	void Game::UpdateRecord(const std::string& playerId, int score)
+	{
+		recordsTable[playerId] = std::max(recordsTable[playerId], score);
 	}
 }
 

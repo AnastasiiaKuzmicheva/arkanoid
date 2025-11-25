@@ -1,37 +1,7 @@
-#include "Math.h"
-#include <cstdlib>
-#include <SFML/Graphics.hpp>
+#include "Text.h"
 
 namespace ArkanoidGame
 {
-	Position2D GetRandomPositionInScreen(float screenWidth, float screenHeight)
-	{
-		Position2D result;
-		result.X = rand() / (float)RAND_MAX * screenWidth;
-		result.Y = rand() / (float)RAND_MAX * screenHeight;
-		return result;
-	}
-
-	bool IsRectanglesCollide(Position2D rect1Position, Vector2D rect1Size,
-		Position2D rect2Position, Vector2D rect2Size)
-	{
-		float dx = (float)fabs(rect1Position.X - rect2Position.X);
-		float dy = (float)fabs(rect1Position.Y - rect2Position.Y);
-
-		return (dx <= (rect1Size.X + rect2Size.X) / 2.0f &&
-			dy <= (rect1Size.Y + rect2Size.Y) / 2.0f);
-	}
-
-	bool IsCirclesCollide(Position2D circle1Position, float circle1Radius,
-		Position2D circle2Position, float circle2Radius)
-	{
-		float squareDistance = (circle1Position.X - circle2Position.X) * (circle1Position.X - circle2Position.X) +
-			(circle1Position.Y - circle2Position.Y) * (circle1Position.Y - circle2Position.Y);
-		float squareRadisuSum = (circle1Radius + circle2Radius) * (circle1Radius + circle2Radius) / 4;
-
-		return squareDistance <= squareRadisuSum;
-	}
-
 	sf::Vector2f GetTextOrigin(const sf::Text& text, const sf::Vector2f& relativePosition)
 	{
 		sf::FloatRect textSize = text.getLocalBounds();
@@ -41,7 +11,7 @@ namespace ArkanoidGame
 		};
 	}
 
-	void DrawItemsList(sf::RenderWindow& window, const std::vector<sf::Text*>& items, float spacing, Orientation orientation, Alignment alignment, const sf::Vector2f& position, const sf::Vector2f& origin)
+	void DrawTextList(sf::RenderWindow& window, const std::vector<sf::Text*>& items, float spacing, Orientation orientation, Alignment alignment, const sf::Vector2f& position, const sf::Vector2f& origin)
 	{
 		sf::FloatRect totalRect;
 		// Calculate total height/width of all texts
@@ -95,8 +65,6 @@ namespace ArkanoidGame
 			{
 				currentPos.y += itemRect.height + spacing;
 			}
-
-
 		}
 	}
 }
