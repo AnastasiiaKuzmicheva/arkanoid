@@ -1,9 +1,9 @@
-#include <assert.h>
-#include <sstream>
-#include "GameStateGameWin.h"
+﻿#include "GameStateGameWin.h"
 #include "Application.h"
 #include "Game.h"
-#include "Text.h"
+#include "Math.h"
+#include <assert.h>
+#include <sstream>
 
 namespace ArkanoidGame
 {
@@ -21,12 +21,12 @@ namespace ArkanoidGame
 		gameWinText.setCharacterSize(48);
 		gameWinText.setStyle(sf::Text::Bold);
 		gameWinText.setFillColor(sf::Color::Green);
-		gameWinText.setString("GAME WIN");
+		gameWinText.setString(L"Âû âûéãðàëè");
 
 		hintText.setFont(font);
 		hintText.setCharacterSize(24);
 		hintText.setFillColor(sf::Color::White);
-		hintText.setString("Press Space to restart\nEsc to exit to main menu");
+		hintText.setString(L"Íàæìèòå Space äëÿ ïåðåçàïóñêà\nEsc äëÿ âûõîäà â ìåíþ");
 	}
 
 	void GameStateGameWinData::HandleWindowEvent(const sf::Event& event)
@@ -44,9 +44,9 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateGameWinData::Update(float deltaTime)
+	void GameStateGameWinData::Update(float timeDelta)
 	{
-		timeSinceGameWin += deltaTime;
+		timeSinceGameWin += timeDelta;
 
 		sf::Color GameWinTextColor = (int)timeSinceGameWin % 2 ? sf::Color::Green : sf::Color::Yellow;
 		gameWinText.setFillColor(GameWinTextColor);

@@ -9,9 +9,10 @@ namespace ArkanoidGame
 	class GameStateGameWinData : public GameStateData
 	{
 	public:
+
 		void Init() override;
 		void HandleWindowEvent(const sf::Event& event) override;
-		void Update(float deltaTime) override;
+		void Update(float timeDelta) override;
 		void Draw(sf::RenderWindow& window) override;
 
 	private:

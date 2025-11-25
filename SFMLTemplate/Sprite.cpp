@@ -1,5 +1,5 @@
 #include "Sprite.h"
-#include "Constants.h"
+#include "GameSettings.h"
 
 namespace ArkanoidGame
 {

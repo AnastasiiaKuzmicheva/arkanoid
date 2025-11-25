@@ -10,9 +10,9 @@ namespace ArkanoidGame
 		MainMenu,
 		Playing,
 		GameOver,
-		GameWin,
 		ExitDialog,
 		Records,
+		GameWin,
 	};
 
 	class GameState
@@ -39,7 +39,8 @@ namespace ArkanoidGame
 		bool IsExclusivelyVisible() const { return isExclusivelyVisible; }
 
 		template<class T>
-		T* GetData() const {
+		T* GetData() const 
+		{
 			return static_cast<T>(data);
 		}
 
@@ -48,8 +49,10 @@ namespace ArkanoidGame
 		void HandleWindowEvent(sf::Event& event);
 
 	private:
-		GameStateType type = GameStateType::None;
+
 		std::unique_ptr<GameStateData> data = nullptr;
+
+		GameStateType type = GameStateType::None;
 		bool isExclusivelyVisible = false;
 	};
 }

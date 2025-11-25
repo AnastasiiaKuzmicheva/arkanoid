@@ -1,5 +1,5 @@
-#include <cstdlib>
 #include "Application.h"
+#include <cstdlib>
 
 namespace ArkanoidGame
 {
@@ -12,20 +12,21 @@ namespace ArkanoidGame
 	Application::Application() :
 		window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), GAME_NAME)
 	{
-		//init random number generator
-		unsigned int seed = (unsigned int)time(nullptr); //get current time as seed. Yoy can also use any number to fix randomization
+		// Init random number generator
+		unsigned int seed = (unsigned int)time(nullptr); // Get current time as seed. You can also use any other number to fix randomization
 		srand(seed);
 
 	}
 
 	void Application::Run()
 	{
-		//init game clock
+		// Init game clock
 		sf::Clock gameClock;
 
-		//Game loop
+		// Game loop
 		while (window.isOpen())
 		{
+
 			float startTime = gameClock.getElapsedTime().asSeconds();
 
 			game.HandleWindowEvents(window);
@@ -37,13 +38,13 @@ namespace ArkanoidGame
 
 			if (game.Update(TIME_PER_FRAME))
 			{
-				//draw everithing here
-				//clear the window first
+				//Draw everything here
+				//Clear the window first
 				window.clear();
 
 				game.Draw(window);
 
-				//end the current frame, display window contents on screen
+				//End the current frame, display window contents on screen
 				window.display();
 			}
 			else
@@ -55,11 +56,13 @@ namespace ArkanoidGame
 			float deltaTime = endTime - startTime;
 			if (deltaTime < TIME_PER_FRAME)
 			{
-				//reduce framerate to not spam CPU and GPU
+				// Reduce framerate to not spam CPU and GPU
 				sf::sleep(sf::seconds(TIME_PER_FRAME - deltaTime));
 			}
-		}
-	}
 
+
+		}
+
+	}
 
 }

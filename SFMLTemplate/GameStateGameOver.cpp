@@ -1,9 +1,8 @@
-#include <assert.h>
-#include <sstream>
-#include "GameStateGameOver.h"
+﻿#include "GameStateGameOver.h"
 #include "Application.h"
-#include "Game.h"
-#include "Text.h"
+#include <sstream>
+#include "Math.h"
+#include <assert.h>
 
 namespace ArkanoidGame
 {
@@ -15,18 +14,20 @@ namespace ArkanoidGame
 
 		timeSinceGameOver = 0.f;
 
-		sf::Color backgroundColor = sf::Color::Black;
-		backgroundColor.a = 200; // a means Alfa, opacity
-		background.setFillColor(backgroundColor);
-
 		gameOverText.setFont(font);
 		gameOverText.setCharacterSize(48);
 		gameOverText.setStyle(sf::Text::Bold);
 		gameOverText.setFillColor(sf::Color::Red);
-		gameOverText.setString(L"GAME OVER");
+		gameOverText.setString(L"Âû ïðîèãðàëè");
+		gameOverText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 0.5f }));
+
+		hintText.setFont(font);
+		hintText.setCharacterSize(24);
+		hintText.setFillColor(sf::Color::White);
+		hintText.setString(L"Íàæìèòå Space äëÿ ïåðåçàïóñêà");
+		hintText.setOrigin(GetTextOrigin(hintText, { 0.5f, 1.f }));
 
 		recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
-
 
 		std::multimap<int, std::string> sortedRecordsTable;
 		Game& game = Application::Instance().GetGame();
@@ -36,6 +37,7 @@ namespace ArkanoidGame
 		}
 
 		bool isPlayerInTable = false;
+
 		auto it = sortedRecordsTable.rbegin();
 		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it) // Note, we can do several actions in for action block
 		{
@@ -59,7 +61,7 @@ namespace ArkanoidGame
 			}
 		}
 
-		// If player is not in table, replace last element with him
+		// If snake is not in table, replace last element with him
 		if (!isPlayerInTable)
 		{
 			sf::Text& text = recordsTableTexts.back();
@@ -69,11 +71,6 @@ namespace ArkanoidGame
 			text.setString(sstream.str());
 			text.setFillColor(sf::Color::Green);
 		}
-
-		hintText.setFont(font);
-		hintText.setCharacterSize(24);
-		hintText.setFillColor(sf::Color::White);
-		hintText.setString(L"Press Space to restart\nEsc to exit to main menu");
 	}
 
 	void GameStateGameOverData::HandleWindowEvent(const sf::Event& event)
@@ -103,11 +100,6 @@ namespace ArkanoidGame
 	{
 		sf::Vector2f viewSize = window.getView().getSize();
 
-		background.setOrigin(0.f, 0.f);
-		background.setSize(viewSize);
-		window.draw(background);
-
-		gameOverText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 1.f }));
 		gameOverText.setPosition(viewSize.x / 2.f, viewSize.y / 2.f - 150.f);
 		window.draw(gameOverText);
 
@@ -119,12 +111,14 @@ namespace ArkanoidGame
 			textsList.push_back(&text);
 		}
 
-		sf::Vector2f tablePosition = { viewSize.x / 2, viewSize.y / 2.f };
-		DrawTextList(window, textsList, 10.f, Orientation::Vertical, Alignment::Min, tablePosition, { 0.5f, 0.f });
+		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE; ++i)
+		{
+			recordsTableTexts[i].setOrigin(GetTextOrigin(recordsTableTexts[i], { 0.5f, 0.f }));
+			recordsTableTexts[i].setPosition(window.getSize().x / 2.f, 200 + i * 50.f);
 
-		hintText.setOrigin(GetTextOrigin(hintText, { 0.5f, 1.f }));
-		hintText.setPosition(viewSize.x / 2.f, viewSize.y - 50.f);
+			window.draw(recordsTableTexts[i]);
+		}
+		hintText.setPosition(viewSize.x / 2.f, viewSize.y - 10.f);
 		window.draw(hintText);
-
 	}
 }

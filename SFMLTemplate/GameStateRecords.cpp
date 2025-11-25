@@ -1,10 +1,9 @@
+﻿#include "GameStateRecords.h"
+#include "Application.h"
+#include "GameSettings.h"
+#include "Math.h"
 #include <assert.h>
 #include <sstream>
-#include "GameRecords.h"
-#include "Application.h"
-#include "Constants.h"
-#include "Text.h"
-#include "Game.h"
 
 namespace ArkanoidGame
 {
@@ -12,7 +11,7 @@ namespace ArkanoidGame
 	{
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
-		titleText.setString(L"Records");
+		titleText.setString(L"Ðåêîðäû");
 		titleText.setFont(font);
 		titleText.setFillColor(sf::Color::Red);
 		titleText.setCharacterSize(30);
@@ -40,13 +39,8 @@ namespace ArkanoidGame
 			text.setFillColor(sf::Color::White);
 			text.setCharacterSize(24);
 		}
-		hintText.setString("Press ESC to return back to main menu");
-		hintText.setFont(font);
-		hintText.setFillColor(sf::Color::White);
-		hintText.setCharacterSize(24);
 	}
 
-	
 	void GameStateRecordsData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
@@ -65,6 +59,8 @@ namespace ArkanoidGame
 
 	void GameStateRecordsData::Draw(sf::RenderWindow& window)
 	{
+		sf::Vector2f viewSize = window.getView().getSize();
+
 		titleText.setOrigin(GetTextOrigin(titleText, { 0.5f, 0.f }));
 		titleText.setPosition(window.getSize().x / 2.f, 100.0f);
 		window.draw(titleText);
@@ -78,7 +74,6 @@ namespace ArkanoidGame
 			textsList.push_back(&text);
 		}
 
-	
 		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE; ++i)
 		{
 			tableTexts[i].setOrigin(GetTextOrigin(tableTexts[i], { 0.5f, 0.f }));
@@ -88,4 +83,3 @@ namespace ArkanoidGame
 		}
 	}
 }
-
