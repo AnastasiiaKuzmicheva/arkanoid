@@ -41,32 +41,26 @@ namespace ArkanoidGame
 		sf::Color color;
 	};
 
-	class UnbreackableBlock : public Block
+	class GlassBlock : public Block
 	{
 	public:
-
-		UnbreackableBlock(const sf::Vector2f& position);
+		GlassBlock(const sf::Vector2f& position);
 		void OnHit() override;
-		void Update(float)
-		{
-			int i = 0;
-			++i;
-		};
 	};
-	class HeavyDestroyableBlock : public Block, public DelayedAction
+		class HeavyDestroyableBlock : public Block, public DelayedAction
 	{
-	public:
+		public:
 
-		HeavyDestroyableBlock(const sf::Vector2f& position, const sf::Color& color = sf::Color::Red);
-		~HeavyDestroyableBlock() = default;
-		void Update(float deltaTime) override;
+			HeavyDestroyableBlock(const sf::Vector2f& position, const sf::Color& color = sf::Color::Red);
+			~HeavyDestroyableBlock() = default;
+			void Update(float deltaTime) override;
 
+			
+		protected:
 
-	protected:
-
-		void OnHit() override;
-		void FinalAction() override;
-		void EachTickAction(float deltaTime) override;
-		sf::Color color;
+			void OnHit() override;
+			void FinalAction() override;
+			void EachTickAction(float deltaTime) override;
+			sf::Color color;
 	};
 }

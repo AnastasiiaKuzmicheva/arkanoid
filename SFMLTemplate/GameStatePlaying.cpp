@@ -72,11 +72,14 @@ namespace ArkanoidGame
 					if ((!hasBrokeOneBlock) && block->CheckCollision(ball))
 					{
 						hasBrokeOneBlock = true;
-						const auto ballPos = ball->GetPosition();
-						const auto blockRect = block->GetRect();
 
-						GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+						auto glassBlock = std::dynamic_pointer_cast<GlassBlock>(block);
+						if (!glassBlock) {
+							const auto ballPos = ball->GetPosition();
+							const auto blockRect = block->GetRect();
 
+							GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+						}
 
 						if (block->isHit == true)
 						{
@@ -162,11 +165,12 @@ namespace ArkanoidGame
 			blocks.emplace_back(std::make_shared<HeavyDestroyableBlock>(sf::Vector2f(x, y)));
 		}
 
-		for (int col = 0; col < 3; ++col)
+		for (int col = 0; col < 9; ++col)
 		{
-			float x = SCREEN_WIDTH / 2.f - BLOCK_WIDTH - BLOCK_SHIFT / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+			float startX = (SCREEN_WIDTH - 8 * (BLOCK_WIDTH + BLOCK_SHIFT)) / 2.f;
+			float x = startX + col * (BLOCK_WIDTH + BLOCK_SHIFT);
 			float y = 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
-			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f(x, y)));
+			blocks.emplace_back(std::make_shared<GlassBlock>(sf::Vector2f(x, y)));
 		}
 	}
 
