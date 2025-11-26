@@ -21,12 +21,12 @@ namespace ArkanoidGame
 		gameWinText.setCharacterSize(48);
 		gameWinText.setStyle(sf::Text::Bold);
 		gameWinText.setFillColor(sf::Color::Green);
-		gameWinText.setString(L"Âû âûéãðàëè");
+		gameWinText.setString(L"YOU WIN");
 
 		hintText.setFont(font);
 		hintText.setCharacterSize(24);
 		hintText.setFillColor(sf::Color::White);
-		hintText.setString(L"Íàæìèòå Space äëÿ ïåðåçàïóñêà\nEsc äëÿ âûõîäà â ìåíþ");
+		hintText.setString(L"Press SPACE to restart\nEsc to main menu");
 	}
 
 	void GameStateGameWinData::HandleWindowEvent(const sf::Event& event)

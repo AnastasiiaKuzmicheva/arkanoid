@@ -7,13 +7,18 @@
 
 namespace ArkanoidGame
 {
-	struct MenuItem
+	class MenuItem
 	{
+	public:
+		// Конструктор по умолчанию
+		MenuItem() = default;
+
+		// Публичные поля (бывшие члены структуры)
 		sf::Text text;
-		sf::Text hintText; // Visible when child item is selected
+		sf::Text hintText;
 		Orientation childrenOrientation = Orientation::Vertical;
 		Alignment childrenAlignment = Alignment::Min;
-		float childrenSpacing;
+		float childrenSpacing = 0.f;
 
 		sf::Color selectedColor = sf::Color::Yellow;
 		sf::Color deselectedColor = sf::Color::White;

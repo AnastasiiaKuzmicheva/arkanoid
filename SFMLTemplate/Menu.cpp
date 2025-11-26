@@ -14,7 +14,7 @@ namespace ArkanoidGame
 		}
 	}
 
-	void Update(float deltaTime)
+	void Menu::Update(float deltaTime)
 	{
 
 	}

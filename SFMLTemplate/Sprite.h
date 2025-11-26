@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "GameSettings.h"
 #include <list>
-//#include "Math.h"
+
 
 namespace ArkanoidGame
 {

@@ -38,4 +38,9 @@ namespace ArkanoidGame
 
 	void DrawItemsList(sf::RenderWindow& window, const std::vector<sf::Text*>& items, float spacing, Orientation orientation, Alignment alignment, const sf::Vector2f& position, const sf::Vector2f& origin);
 
+	template<typename T>
+	const T& clamp(const T& value, const T& min, const T& max)
+	{
+		return (value < min) ? min : (value > max) ? max : value;
+	}
 }

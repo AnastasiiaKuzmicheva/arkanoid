@@ -22,7 +22,7 @@ namespace ArkanoidGame
 		GameState() = default;
 		GameState(GameStateType type, bool isExclusivelyVisible);
 		GameState(const GameState& state) = delete;
-		GameState(GameState&& state) { operator=(std::move(state)); }
+		GameState(GameState&& state) noexcept { operator=(std::move(state)); }
 
 		~GameState();
 

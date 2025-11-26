@@ -11,7 +11,7 @@ namespace ArkanoidGame
 	{
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
-		titleText.setString(L"Ðåêîðäû");
+		titleText.setString(L"Leadboard");
 		titleText.setFont(font);
 		titleText.setFillColor(sf::Color::Red);
 		titleText.setCharacterSize(30);

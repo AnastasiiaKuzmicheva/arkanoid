@@ -3,6 +3,7 @@
 #include "GameSettings.h"
 #include "Sprite.h"
 #include <algorithm>
+#include "Math.h"
 
 namespace
 {
@@ -32,7 +33,7 @@ namespace ArkanoidGame
 	void Platform::Move(float speed)
 	{
 		auto position = sprite.getPosition();
-		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2.f, SCREEN_WIDTH - PLATFORM_WIDTH / 2.f);
+		position.x = clamp(position.x + speed, PLATFORM_WIDTH / 2.f, SCREEN_WIDTH - PLATFORM_WIDTH / 2.f);
 		sprite.setPosition(position);
 	}
 

@@ -1,6 +1,10 @@
 #include "Math.h"
+#include "GameSettings.h"
+#include <cmath>
 #include <cstdlib>
+#include <algorithm>   
 #include <SFML/Graphics.hpp>
+
 
 namespace ArkanoidGame
 {

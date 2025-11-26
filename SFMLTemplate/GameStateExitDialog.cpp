@@ -9,7 +9,7 @@ namespace ArkanoidGame
 	{
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
 
-		hintText.setString(L"Âû óâåðåíû ÷òî õîòèòå çàâåðøèòü ýòó èãðó? Enter - Äà, Esc - Íåò");
+		hintText.setString(L"Are you sure you wanna quit? Enter - yes, Esc - no");
 		hintText.setFont(font);
 		hintText.setCharacterSize(24);
 		hintText.setFillColor(sf::Color::White);

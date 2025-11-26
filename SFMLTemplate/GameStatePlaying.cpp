@@ -27,7 +27,7 @@ namespace ArkanoidGame
 		inputHintText.setFont(font);
 		inputHintText.setCharacterSize(16);
 		inputHintText.setFillColor(sf::Color::White);
-		inputHintText.setString(L"Èñïîëüçóéòå êëàâèøû A D äëÿ ïåðåìåùåíèÿ, ESC äëÿ âûõîäà");
+		inputHintText.setString(L"use A D for move, ESC to menu");
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f })));
@@ -85,7 +85,7 @@ namespace ArkanoidGame
 			blocks.end()
 		);
 
-		scoreText.setString(L"Ñ÷¸ò: " + std::to_wstring(score));
+		scoreText.setString(L"Score: " + std::to_wstring(score));
 
 		if (needInverseDirX)
 		{
@@ -145,13 +145,12 @@ namespace ArkanoidGame
 		{
 			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
 			{
-				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * BLOCK_HEIGHT })));
+				float x = BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+				float y = 100.f + row * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
+				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f(x, y)));
 			}
 		}
-		/*for (int col = 0; col < 3; ++col)
-		{
-			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f({ SCREEN_WIDTH / 2.f - BLOCK_WIDTH - BLOCK_SHIFT / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * BLOCK_HEIGHT })));
-		}*/
+		
 	}
 
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY)

@@ -18,13 +18,13 @@ namespace ArkanoidGame
 		gameOverText.setCharacterSize(48);
 		gameOverText.setStyle(sf::Text::Bold);
 		gameOverText.setFillColor(sf::Color::Red);
-		gameOverText.setString(L"Âû ïðîèãðàëè");
+		gameOverText.setString(L"Game Over");
 		gameOverText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 0.5f }));
 
 		hintText.setFont(font);
 		hintText.setCharacterSize(24);
 		hintText.setFillColor(sf::Color::White);
-		hintText.setString(L"Íàæìèòå Space äëÿ ïåðåçàïóñêà");
+		hintText.setString(L"Press SPACE to restart game");
 		hintText.setOrigin(GetTextOrigin(hintText, { 0.5f, 1.f }));
 
 		recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);

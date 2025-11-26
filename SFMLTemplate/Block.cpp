@@ -20,7 +20,7 @@ namespace ArkanoidGame
 	{
 		auto gameObject = std::dynamic_pointer_cast<GameObject>(collisionObject);
 		assert(gameObject);
-		sf::Rect rect = gameObject->GetRect();
+		sf::FloatRect rect = gameObject->GetRect();
 		rect.width *= 1.1f;
 		return GetRect().intersects(gameObject->GetRect());
 	}
@@ -66,7 +66,7 @@ namespace ArkanoidGame
 
 		auto gameObject = std::dynamic_pointer_cast<GameObject>(collisionObject);
 		assert(gameObject);
-		sf::Rect rect = gameObject->GetRect();
+		sf::FloatRect rect = gameObject->GetRect();
 		rect.width *= 1.1f;
 		return GetRect().intersects(gameObject->GetRect());
 	}
