@@ -21,9 +21,9 @@ namespace ArkanoidGame
 		direction.y = std::sin(pi / 180.f * angle);
 	}
 
-	void Ball::Update(float timeDelta)
+	void Ball::Update(float deltaTime)
 	{
-		const auto pos = sprite.getPosition() + BALL_SPEED * timeDelta * direction;
+		const auto pos = sprite.getPosition() + BALL_SPEED * deltaTime * direction;
 		sprite.setPosition(pos);
 
 		if (pos.x - BALL_SIZE / 2.f <= 0 || pos.x + BALL_SIZE / 2.f >= SCREEN_WIDTH) {

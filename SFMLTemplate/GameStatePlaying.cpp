@@ -77,7 +77,11 @@ namespace ArkanoidGame
 
 						GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
 
-						score += 10;
+
+						if (block->isHit == true)
+						{
+							score += 10;
+						}
 
 					}
 					return block->IsBroken();
@@ -150,7 +154,20 @@ namespace ArkanoidGame
 				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f(x, y)));
 			}
 		}
-		
+
+		for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+		{
+			float x = BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+			float y = 100.f + row * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
+			blocks.emplace_back(std::make_shared<HeavyDestroyableBlock>(sf::Vector2f(x, y)));
+		}
+
+		for (int col = 0; col < 3; ++col)
+		{
+			float x = SCREEN_WIDTH / 2.f - BLOCK_WIDTH - BLOCK_SHIFT / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+			float y = 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
+			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f(x, y)));
+		}
 	}
 
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY)
