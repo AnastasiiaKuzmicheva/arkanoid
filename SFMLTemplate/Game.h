@@ -1,9 +1,11 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
-#include <unordered_map>
-#include "Constants.h"
-#include "GameState.h"
+#include <SFML/Audio.hpp>
+#include "GameSettings.h"
 #include "Sprite.h"
+#include "GameState.h"
+#include <unordered_map>
 
 namespace ArkanoidGame
 {
@@ -16,7 +18,15 @@ namespace ArkanoidGame
 		Empty = 0
 	};
 
-	
+	enum class DifficultyLevel : std::uint8_t
+	{
+		Easy,
+		Normal,
+		Hard,
+		Insane,
+		Impossible,
+	};
+
 	enum class GameStateChangeType
 	{
 		None,
@@ -29,17 +39,17 @@ namespace ArkanoidGame
 	{
 	public:
 		using RecordsTable = std::unordered_map<std::string, int>;
-
 		Game();
 		~Game();
-
 		void HandleWindowEvents(sf::RenderWindow& window);
-		bool Update(float deltaTime); // Return false if game should be closed
+		bool Update(float deltaTime);
 		void Draw(sf::RenderWindow& window);
 		void Shutdown();
 
-		bool IsEnableOptions(GameOptions option) const;
 		void SetOption(GameOptions option, bool value);
+		void SetDifficultyLevel(DifficultyLevel level, bool value);
+		bool IsEnableOptions(GameOptions option);
+		bool IsEnableDifficultyLevel(DifficultyLevel level);
 
 		const RecordsTable& GetRecordsTable() const { return recordsTable; }
 		int GetRecordByPlayerId(const std::string& playerId) const;
@@ -54,16 +64,16 @@ namespace ArkanoidGame
 		// Remove all game states from the stack and add new one
 		void SwitchStateTo(GameStateType newState);
 
-
 	private:
+
 		std::vector<GameState> stateStack;
 		GameStateChangeType stateChangeType = GameStateChangeType::None;
-		GameStateType pendingGameStateType = GameStateType::None;
-		bool pendingGameStateIsExclusivelyVisible = false;
+		GameStateType pendingStateType = GameStateType::None;
+		bool pendingStateIsExclusivelyVisible = false;
 
 		GameOptions options = GameOptions::Default;
+		DifficultyLevel difficulty = DifficultyLevel::Normal;
+
 		RecordsTable recordsTable;
 	};
-
 }
-

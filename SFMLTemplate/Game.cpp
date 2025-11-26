@@ -1,30 +1,23 @@
+#include "Game.h"
 #include <cassert>
 #include <algorithm>
-#include "Game.h"
-#include "GameStatePlaying.h"
-#include "GameStateGameOver.h"
-#include "GameStatePauseMenu.h"
-#include "GameStateMainMenu.h"
-#include "GameRecords.h"
-
 
 namespace ArkanoidGame
 {
 	Game::Game()
 	{
-		// Generate fake records table
 		recordsTable =
 		{
-			{"John", MAX_APPLES / 2},
-			{"Jane", MAX_APPLES / 3},
-			{"Alice", MAX_APPLES / 4 },
-			{"Bob", MAX_APPLES / 5 },
-			{"Clementine", MAX_APPLES / 5 },
+			{"John", rand() % 1000},
+			{"Jane", rand() % 1000 },
+			{"Alice", rand() % 1000 },
+			{"Bob", rand() % 1000 },
+			{"Clementine", rand() % 1000 },
 		};
 
 		stateChangeType = GameStateChangeType::None;
-		pendingGameStateType = GameStateType::None;
-		pendingGameStateIsExclusivelyVisible = false;
+		pendingStateType = GameStateType::None;
+		pendingStateIsExclusivelyVisible = false;
 
 		SwitchStateTo(GameStateType::MainMenu);
 	}
@@ -33,6 +26,7 @@ namespace ArkanoidGame
 	{
 		Shutdown();
 	}
+
 
 	void Game::HandleWindowEvents(sf::RenderWindow& window)
 	{
@@ -72,16 +66,14 @@ namespace ArkanoidGame
 		}
 
 		// Initialize new game state if needed
-		if (pendingGameStateType != GameStateType::None)
+		if (pendingStateType != GameStateType::None)
 		{
-			stateStack.push_back(GameState(pendingGameStateType,
-		pendingGameStateIsExclusivelyVisible));
-			
+			stateStack.push_back(GameState(pendingStateType, pendingStateIsExclusivelyVisible));
 		}
 
 		stateChangeType = GameStateChangeType::None;
-		pendingGameStateType = GameStateType::None;
-		pendingGameStateIsExclusivelyVisible = false;
+		pendingStateType = GameStateType::None;
+		pendingStateIsExclusivelyVisible = false;
 
 		if (stateStack.size() > 0)
 		{
@@ -94,7 +86,6 @@ namespace ArkanoidGame
 
 	void Game::Draw(sf::RenderWindow& window)
 	{
-
 		if (stateStack.size() > 0)
 		{
 			std::vector<GameState*> visibleGameStates;
@@ -123,38 +114,31 @@ namespace ArkanoidGame
 		}
 
 		stateChangeType = GameStateChangeType::None;
-		pendingGameStateType = GameStateType::None;
-		pendingGameStateIsExclusivelyVisible = false;
+		pendingStateType = GameStateType::None;
+		pendingStateIsExclusivelyVisible = false;
 	}
 
 	void Game::PushState(GameStateType stateType, bool isExclusivelyVisible)
 	{
-		pendingGameStateType = stateType;
-		pendingGameStateIsExclusivelyVisible = isExclusivelyVisible;
+		pendingStateType = stateType;
+		pendingStateIsExclusivelyVisible = isExclusivelyVisible;
 		stateChangeType = GameStateChangeType::Push;
 	}
 
 	void Game::PopState()
 	{
-		pendingGameStateType = GameStateType::None;
-		pendingGameStateIsExclusivelyVisible = false;
+		pendingStateType = GameStateType::None;
+		pendingStateIsExclusivelyVisible = false;
 		stateChangeType = GameStateChangeType::Pop;
 	}
 
-
 	void Game::SwitchStateTo(GameStateType newState)
 	{
-		pendingGameStateType = newState;
-		pendingGameStateIsExclusivelyVisible = false;
+		pendingStateType = newState;
+		pendingStateIsExclusivelyVisible = false;
 		stateChangeType = GameStateChangeType::Switch;
 	}
 
-	bool Game::IsEnableOptions(GameOptions option) const
-	{
-		const bool isEnable = ((std::uint8_t)options & (std::uint8_t)option) != (std::uint8_t)GameOptions::Empty;
-		return isEnable;
-	}
-	
 	void Game::SetOption(GameOptions option, bool value)
 	{
 		if (value)
@@ -165,9 +149,33 @@ namespace ArkanoidGame
 		{
 			options = (GameOptions)((std::uint8_t)options & ~(std::uint8_t)option);
 		}
+
 	}
 
-	
+	void Game::SetDifficultyLevel(DifficultyLevel level, bool value)
+	{
+		if (value)
+		{
+			difficulty = level;
+		}
+		else
+		{
+			difficulty = (DifficultyLevel)((std::uint8_t)difficulty & ~(std::uint8_t)level);
+		}
+	}
+
+	bool Game::IsEnableOptions(GameOptions option)
+	{
+		const bool isEnable = ((std::uint8_t)options & (std::uint8_t)option) != (std::uint8_t)GameOptions::Empty;
+		return isEnable;
+	}
+
+	bool Game::IsEnableDifficultyLevel(DifficultyLevel level)
+	{
+		const bool isEnable = difficulty == level;
+		return isEnable;
+	}
+
 	int Game::GetRecordByPlayerId(const std::string& playerId) const
 	{
 		auto it = recordsTable.find(playerId);
@@ -179,4 +187,3 @@ namespace ArkanoidGame
 		recordsTable[playerId] = std::max(recordsTable[playerId], score);
 	}
 }
-

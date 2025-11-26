@@ -1,103 +1,185 @@
-#include <assert.h>
-#include "GameStateMainMenu.h"
+﻿#include "GameStateMainMenu.h"
 #include "Application.h"
-#include "Game.h"
+#include <assert.h>
 
 namespace ArkanoidGame
 {
 	void GameStateMainMenuData::Init()
 	{
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
+
 		assert(soundBtnHoverBuffer.loadFromFile(SOUNDS_PATH + "\\menu-hover.wav"));
 
 		soundBtnHover.setBuffer(soundBtnHoverBuffer);
 
+		auto setTextParameters = [&](sf::Text& itemText, const std::wstring& title, int fontSize, sf::Color color = sf::Color::Transparent)
+			{
+				itemText.setString(title);
+				itemText.setFont(font);
+				itemText.setCharacterSize(fontSize);
+				if (color != sf::Color::Transparent)
+				{
+					itemText.setFillColor(color);
+				}
+			};
+
+		Game& game = Application::Instance().GetGame();
 		MenuItem startGame;
-		startGame.text.setString("Start Game");
-		startGame.text.setFont(font);
-		startGame.text.setCharacterSize(24);
-		startGame.onPressCallback = [](MenuItem&) 
-		{
-			Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
-		};
+		setTextParameters(startGame.text, L"Start Game", 24);
+		startGame.onPressCallback = [](MenuItem&)
+			{
+				Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
+			};
+
+		const bool isEasy = game.IsEnableDifficultyLevel(DifficultyLevel::Easy);
+		MenuItem difficultyEasy;
+		setTextParameters(difficultyEasy.text, L"Easy: " + std::wstring(isEasy ? L"On" : L"Off"), 24);
+		difficultyEasy.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newEasy = !game.IsEnableDifficultyLevel(DifficultyLevel::Easy);
+				game.SetDifficultyLevel(DifficultyLevel::Easy, newEasy);
+				item.text.setString(L"Easy: " + std::wstring(newEasy ? L"On" : L"Off"));
+			};
+
+		const bool isNormal = game.IsEnableDifficultyLevel(DifficultyLevel::Normal);
+		MenuItem difficultyNormal;
+		setTextParameters(difficultyNormal.text, L"Normal: " + std::wstring(isNormal ? L"On" : L"Off"), 24);
+		difficultyNormal.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newNormal = !game.IsEnableDifficultyLevel(DifficultyLevel::Normal);
+				game.SetDifficultyLevel(DifficultyLevel::Normal, newNormal);
+				item.text.setString(L"Normal: " + std::wstring(newNormal ? L"On" : L"Off"));
+			};
+
+		const bool isHard = game.IsEnableDifficultyLevel(DifficultyLevel::Hard);
+		MenuItem difficultyHard;
+		setTextParameters(difficultyHard.text, L"Hard: " + std::wstring(isHard ? L"On" : L"Off"), 24);
+		difficultyHard.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newHard = !game.IsEnableDifficultyLevel(DifficultyLevel::Hard);
+				game.SetDifficultyLevel(DifficultyLevel::Hard, newHard);
+				item.text.setString(L"Hard: " + std::wstring(newHard ? L"On" : L"Off"));
+			};
+
+		const bool isInsane = game.IsEnableDifficultyLevel(DifficultyLevel::Insane);
+		MenuItem difficultyInsane;
+		setTextParameters(difficultyInsane.text, L"Insane: " + std::wstring(isInsane ? L"On" : L"Off"), 24);
+		difficultyInsane.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newInsane = !game.IsEnableDifficultyLevel(DifficultyLevel::Insane);
+				game.SetDifficultyLevel(DifficultyLevel::Insane, newInsane);
+				item.text.setString(L"Insane: " + std::wstring(newInsane ? L"On" : L"Off"));
+			};
+
+		const bool isImpossible = game.IsEnableDifficultyLevel(DifficultyLevel::Impossible);
+		MenuItem difficultyImpossible;
+		setTextParameters(difficultyImpossible.text, L"Impossible: " + std::wstring(isImpossible ? L"On" : L"Off"), 24);
+		difficultyImpossible.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newImpossible = !game.IsEnableDifficultyLevel(DifficultyLevel::Impossible);
+				game.SetDifficultyLevel(DifficultyLevel::Impossible, newImpossible);
+				item.text.setString(L"Impossible: " + std::wstring(newImpossible ? L"On" : L"Off"));
+			};
+
+		MenuItem difficulty;
+		setTextParameters(difficulty.text, L"Difficulty Level", 24);
+		setTextParameters(difficulty.hintText, L"Choose difficulty level", 48, sf::Color::Red);
+		difficulty.childrenOrientation = Orientation::Vertical;
+		difficulty.childrenAlignment = Alignment::Middle;
+		difficulty.childrenSpacing = 10.f;
+		difficulty.children.push_back(difficultyEasy);
+		difficulty.children.push_back(difficultyNormal);
+		difficulty.children.push_back(difficultyHard);
+		difficulty.children.push_back(difficultyInsane);
+		difficulty.children.push_back(difficultyImpossible);
+
+
+		const bool isSound = game.IsEnableOptions(GameOptions::Sound);
+
+		MenuItem optionsSound;
+		setTextParameters(optionsSound.text, L"Sound: " + std::wstring(isSound ? L"On" : L"Off"), 24);
+		optionsSound.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newSound = !game.IsEnableOptions(GameOptions::Sound);
+				game.SetOption(GameOptions::Sound, newSound);
+				item.text.setString(L"Sound: " + std::wstring(newSound ? L"On" : L"Off"));
+			};
+
+		const bool isMusic = game.IsEnableOptions(GameOptions::Music);
+		MenuItem optionsMusic;
+		setTextParameters(optionsMusic.text, L"Music: " + std::wstring(isMusic ? L"On" : L"Off"), 24);
+		optionsMusic.onPressCallback = [](MenuItem& item)
+			{
+				Game& game = Application::Instance().GetGame();
+				bool newMusic = !game.IsEnableOptions(GameOptions::Music);
+				game.SetOption(GameOptions::Music, newMusic);
+				item.text.setString(L"Music: " + std::wstring(newMusic ? L"On" : L"Off"));
+			};
 
 		MenuItem options;
-		options.text.setString("Options");
-		options.text.setFont(font);
-		options.text.setCharacterSize(24);
-		options.hintText.setString("Options");
-		options.hintText.setFont(font);
-		options.hintText.setCharacterSize(48);
-		options.hintText.setFillColor(sf::Color::Red);
+		setTextParameters(options.text, L"Settings", 24);
+		setTextParameters(options.hintText, L"Settings", 48, sf::Color::Red);
 		options.childrenOrientation = Orientation::Vertical;
 		options.childrenAlignment = Alignment::Middle;
 		options.childrenSpacing = 10.f;
 
-		
-		MenuItem recordsItem;
-		recordsItem.text.setString("Leaderboard");
-		recordsItem.text.setFont(font);
-		recordsItem.text.setCharacterSize(24);
-		recordsItem.onPressCallback = [](MenuItem&)
-		{
-				Application::Instance().GetGame().PushState(GameStateType::Records, true);
-		};
+		options.children.push_back(optionsSound);
+		options.children.push_back(optionsMusic);
 
+
+		MenuItem records;
+		setTextParameters(records.text, L"Leaderboard", 24);
+		records.onPressCallback = [](MenuItem&)
+			{
+				Application::Instance().GetGame().PushState(GameStateType::Records, true);
+			};
 
 		MenuItem yesItem;
-		yesItem.text.setString("Yes");
-		yesItem.text.setFont(font);
-		yesItem.text.setCharacterSize(24);
+		setTextParameters(yesItem.text, L"Yes", 24);
 		yesItem.onPressCallback = [](MenuItem&)
-		{
+			{
 				Application::Instance().GetGame().SwitchStateTo(GameStateType::None);
-		};
+			};
 
 		MenuItem noItem;
-		noItem.text.setString("No");
-		noItem.text.setFont(font);
-		noItem.text.setCharacterSize(24);
-		noItem.onPressCallback = [this](MenuItem&)
-		{
+		setTextParameters(noItem.text, L"No", 24);
+		noItem.onPressCallback = [&](MenuItem&)
+			{
 				menu.GoBack();
-		};
+			};
 
-		MenuItem exitGameItem;
-		exitGameItem.text.setString("Quit game");
-		exitGameItem.text.setFont(font);
-		exitGameItem.text.setCharacterSize(24);
-		exitGameItem.hintText.setString("Are you sure?");
-		exitGameItem.hintText.setFont(font);
-		exitGameItem.hintText.setCharacterSize(48);
-		exitGameItem.hintText.setFillColor(sf::Color::Red);
-		exitGameItem.childrenOrientation = Orientation::Horizontal;
-		exitGameItem.childrenAlignment = Alignment::Middle;
-		exitGameItem.childrenSpacing = 10.f;
-		exitGameItem.childrens.push_back(yesItem);
-		exitGameItem.childrens.push_back(noItem);
+		MenuItem exitGame;
+		setTextParameters(exitGame.text, L"Quit Game", 24);
 
-		MenuItem mainMenuItem;
-		mainMenuItem.hintText.setString("Arkanoid");
-		mainMenuItem.hintText.setFont(font);
-		mainMenuItem.hintText.setCharacterSize(48);
-		mainMenuItem.hintText.setFillColor(sf::Color::Red);
-		mainMenuItem.childrenOrientation = Orientation::Vertical;
-		mainMenuItem.childrenAlignment = Alignment::Middle;
-		mainMenuItem.childrenSpacing = 10.f;
-		mainMenuItem.childrens.push_back(startGame);
-		mainMenuItem.childrens.push_back(options);
-		mainMenuItem.childrens.push_back(recordsItem);
-		mainMenuItem.childrens.push_back(exitGameItem);
+		setTextParameters(exitGame.hintText, L"Are you sure?", 48, sf::Color::Red);
+		exitGame.childrenOrientation = Orientation::Horizontal;
+		exitGame.childrenAlignment = Alignment::Middle;
+		exitGame.childrenSpacing = 10.f;
+		exitGame.children.push_back(yesItem);
+		exitGame.children.push_back(noItem);
 
-		menu.Init(mainMenuItem);
+		MenuItem mainMenu;
+		setTextParameters(mainMenu.hintText, L"Arcanoid", 48, sf::Color::Red);
+		mainMenu.childrenOrientation = Orientation::Vertical;
+		mainMenu.childrenAlignment = Alignment::Middle;
+		mainMenu.childrenSpacing = 10.f;
+		mainMenu.children.push_back(startGame);
+		mainMenu.children.push_back(difficulty);
+		mainMenu.children.push_back(options);
+		mainMenu.children.push_back(records);
+		mainMenu.children.push_back(exitGame);
 
-		
+		menu.Init(mainMenu);
 	}
-
 
 	void GameStateMainMenuData::HandleWindowEvent(const sf::Event& event)
 	{
-		
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
@@ -106,11 +188,15 @@ namespace ArkanoidGame
 			}
 			else if (event.key.code == sf::Keyboard::Enter)
 			{
+				if (Application::Instance().GetGame().IsEnableOptions(GameOptions::Sound))
+				{
+					soundBtnHover.play();
+				}
+
 				menu.PressOnSelectedItem();
 			}
 
 			Orientation orientation = menu.GetCurrentContext().childrenOrientation;
-
 			if (orientation == Orientation::Vertical && event.key.code == sf::Keyboard::Up ||
 				orientation == Orientation::Horizontal && event.key.code == sf::Keyboard::Left)
 			{
@@ -126,7 +212,7 @@ namespace ArkanoidGame
 
 	void GameStateMainMenuData::Update(float deltaTime)
 	{
-		
+
 	}
 
 	void GameStateMainMenuData::Draw(sf::RenderWindow& window)

@@ -1,8 +1,9 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <functional>
+
+#include "SFML/Graphics.hpp"
+#include "Math.h"
 #include <list>
-#include "Text.h"
+#include <functional>
 
 namespace ArkanoidGame
 {
@@ -23,7 +24,7 @@ namespace ArkanoidGame
 		sf::Color deselectedColor = sf::Color::White;
 
 		bool isEnabled = true;
-		std::vector<MenuItem> childrens;
+		std::vector<MenuItem> children;
 
 		std::function<void(MenuItem& item)> onPressCallback;
 
@@ -33,25 +34,25 @@ namespace ArkanoidGame
 	class Menu
 	{
 	public:
+
 		void Init(const MenuItem& item);
 		void Update(float deltaTime);
 		void Draw(sf::RenderWindow& window, sf::Vector2f position, sf::Vector2f origin);
-		void PressOnSelectedItem(); //press on selected menu item
-		void GoBack(); //go back to previous menu
+		void PressOnSelectedItem();
+		void GoBack();
+
 		void SwitchToPreviousMenuItem();
 		void SwitchToNextMenuItem();
-
 
 
 		MenuItem& GetCurrentContext();
 
 	private:
+
 		void InitMenuItem(MenuItem& menu);
 		void SelectMenuItem(MenuItem& item);
 
 		MenuItem rootItem;
 		MenuItem* selectedItem = nullptr;
 	};
-
 }
-

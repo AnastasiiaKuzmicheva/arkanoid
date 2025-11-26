@@ -1,21 +1,19 @@
-#include <sstream>
-#include <assert.h>
-#include "GameStatePlaying.h"
+ï»¿#include "GameStatePlaying.h"
 #include "Application.h"
-#include "Block.h"
-#include "Text.h"
 #include "Game.h"
+#include "Block.h"
+#include "Math.h"
+#include "assert.h"
+#include <sstream>
 
 namespace ArkanoidGame
 {
 	void GameStatePlayingData::Init()
 	{
 		// Init game resources (terminate if error)
-	
 		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
-		assert(soundDeathBuffer.loadFromFile(SOUNDS_PATH + "\\GameOver.wav"));
-		assert(soundBackgroundBuffer.loadFromFile(SOUNDS_PATH + "\\Background.wav"));
 
+		
 
 		// Init background
 		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -29,33 +27,17 @@ namespace ArkanoidGame
 		inputHintText.setFont(font);
 		inputHintText.setCharacterSize(16);
 		inputHintText.setFillColor(sf::Color::White);
-		inputHintText.setString(L"Use arrow keys to move");
+		inputHintText.setString(L"use A D for move, ESC to menu");
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
 		gameObjects.emplace_back(std::make_shared<Platform>(sf::Vector2f({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f })));
 		gameObjects.emplace_back(std::make_shared<Ball>(sf::Vector2f({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f })));
-
-		for (int row = 0; row < BLOCKS_COUNT_ROWS; ++row)
-		{
-			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
-			{
-				
-				float x = BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
-				float y = 100.f + row * (BLOCK_HEIGHT + BLOCK_SHIFT);  // ? ÄÎÁÀÂÜ + BLOCK_SHIFT!
-
-				gameObjects.emplace_back(std::make_shared<Block>(sf::Vector2f(x, y)));
-
-				//gameObjects.emplace_back(std::make_shared<Block>(sf::Vector2f({ BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT), 100.f + row * BLOCK_HEIGHT })));
-			}
-		}
-
-		soundBackground.setBuffer(soundBackgroundBuffer);
-
-		soundDeath.setBuffer(soundDeathBuffer);
-				
+		createBlocks();
+		
 	}
 
-	void  GameStatePlayingData::HandleWindowEvent(const sf::Event& event)
+
+	void GameStatePlayingData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
@@ -68,69 +50,72 @@ namespace ArkanoidGame
 
 	void GameStatePlayingData::Update(float deltaTime)
 	{
-		for (auto&& object : gameObjects) 
-		{
-			object->Update(deltaTime);
-		}
+		static auto updateFunctor = [deltaTime](auto obj) { obj->Update(deltaTime); };
 
-		const Platform* platform = (Platform*)gameObjects[0].get();
-		Ball* ball = (Ball*)gameObjects[1].get();
-		const bool isCollision = platform->CheckCollisionWithBall(*ball);
+		std::for_each(gameObjects.begin(), gameObjects.end(), updateFunctor);
+		std::for_each(blocks.begin(), blocks.end(), updateFunctor);
 
-		if (isCollision)
-		{
-			ball->InvertDirectionY();
-		}
+		std::shared_ptr <Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
+		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
+
+		const bool isCollision = platform->CheckCollision(ball);
 
 		bool needInverseDirX = false;
 		bool needInverseDirY = false;
-		for (size_t i = 2; i < gameObjects.size(); ++i) {
-			const auto block = (Block*)gameObjects[i].get();
-			if (block->CheckCollisionWithBall(*ball)) {
-				const auto ballPos = ball->GetPosition();
-				const auto blockRect = block->GetRect();
+		bool hasBrokeOneBlock = false;
 
-				if (ballPos.y > blockRect.top + blockRect.height && ballPos.x >= blockRect.left && ballPos.x <= blockRect.left + blockRect.width) {
-					needInverseDirY = true;
-				}
+		//remove-erase idiom
+		blocks.erase(
+			std::remove_if(blocks.begin(), blocks.end(),
+				[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block)
+				{
+					if ((!hasBrokeOneBlock) && block->CheckCollision(ball))
+					{
+						hasBrokeOneBlock = true;
+						const auto ballPos = ball->GetPosition();
+						const auto blockRect = block->GetRect();
 
-				if (ballPos.y < blockRect.top && ballPos.x >= blockRect.left && ballPos.x <= blockRect.left + blockRect.width) {
-					needInverseDirY = true;
-				}
+						GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
 
-				if (ballPos.x < blockRect.left && ballPos.y >= blockRect.top && ballPos.y <= blockRect.top + blockRect.height) {
-					needInverseDirX = true;
-				}
+						score += 10;
 
-				if (ballPos.x > blockRect.left + blockRect.width && ballPos.y >= blockRect.top && ballPos.y <= blockRect.top + blockRect.height) {
-					needInverseDirX = true;
-				}
+					}
+					return block->IsBroken();
+				}),
+			blocks.end()
+		);
 
-				std::swap(gameObjects[i], gameObjects.back());
-				gameObjects.pop_back();
-				i--;
-			}
-		}
-		if (needInverseDirX) {
+		scoreText.setString(L"Score: " + std::to_wstring(score));
+
+		if (needInverseDirX)
+		{
 			ball->InvertDirectionX();
 		}
-		if (needInverseDirY) {
+
+		if (needInverseDirY)
+		{
 			ball->InvertDirectionY();
 		}
 
-		const bool isGameWin = gameObjects.size() == 2;
-		const bool isGameOver = !isCollision && ball->GetPosition().y > platform->GetRect().top;
+		const bool isGameWin = blocks.size() == 0;
+		const bool isGameFinished = !isCollision && ball->GetPosition().y > platform->GetRect().top;
 		Game& game = Application::Instance().GetGame();
 
-		if (isGameWin) 
+		if (isGameWin)
 		{
 			game.PushState(GameStateType::GameWin, false);
 		}
-		else if (isGameOver)
+		else if (isGameFinished)
 		{
-			soundDeath.play();
+			//gameOverSound.play();
+
+			Game& game = Application::Instance().GetGame();
+
+			// Find player in records table and update his score
+			//game.UpdateRecord(PLAYER_NAME, numEatenApples);
 			game.PushState(GameStateType::GameOver, false);
-		}		
+			game.UpdateRecord(PLAYER_NAME, score);
+		}
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -138,9 +123,11 @@ namespace ArkanoidGame
 		// Draw background
 		window.draw(background);
 
-		for (auto&& object : gameObjects) {
-			object->Draw(window);
-		}
+		static auto drawFunc = [&window](auto block) { block->Draw(window); };
+
+		// Draw game objects
+		std::for_each(gameObjects.begin(), gameObjects.end(), drawFunc);
+		std::for_each(blocks.begin(), blocks.end(), drawFunc);
 
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);
@@ -149,5 +136,37 @@ namespace ArkanoidGame
 		sf::Vector2f viewSize = window.getView().getSize();
 		inputHintText.setPosition(viewSize.x - 10.f, 10.f);
 		window.draw(inputHintText);
+	}
+
+	void GameStatePlayingData::createBlocks()
+	{
+		int row = 0;
+		for (; row < BLOCKS_COUNT_ROWS; ++row)
+		{
+			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+			{
+				float x = BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+				float y = 100.f + row * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
+				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f(x, y)));
+			}
+		}
+		
+	}
+
+	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY)
+	{
+
+		if (ballPos.y > blockRect.top + blockRect.height)
+		{
+			needInverseDirY = true;
+		}
+		if (ballPos.x < blockRect.left)
+		{
+			needInverseDirX = true;
+		}
+		if (ballPos.x > blockRect.left + blockRect.width)
+		{
+			needInverseDirX = true;
+		}
 	}
 }

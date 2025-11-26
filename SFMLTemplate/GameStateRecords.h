@@ -1,27 +1,25 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "GameStateData.h"
-#include "Menu.h"
+#include <SFML/Graphics.hpp>
+#include <vector>
 
 namespace ArkanoidGame
 {
-	class Game;
-
-	class GameStatePauseMenuData : public GameStateData
+	class GameStateRecordsData : public GameStateData
 	{
 	public:
 
-		void Init() override;
 		void HandleWindowEvent(const sf::Event& event) override;
+		void Init() override;
 		void Update(float deltaTime) override;
 		void Draw(sf::RenderWindow& window) override;
 
 	private:
+
 		sf::Font font;
 
-		sf::RectangleShape background;
 		sf::Text titleText;
-
-		Menu menu;
+		std::vector<sf::Text> tableTexts;
+		sf::Text hintText;
 	};
 }
