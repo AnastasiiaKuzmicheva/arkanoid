@@ -10,7 +10,7 @@ namespace ArkanoidGame
 		InitMenuItem(rootItem);
 		if (!rootItem.children.empty())
 		{
-			SelectMenuItem(rootItem.children.front());
+			SelectMenuItem(*rootItem.children.front());
 		}
 	}
 
@@ -24,21 +24,22 @@ namespace ArkanoidGame
 
 		for (auto& child : item.children)
 		{
-			child.parent = &item;
-			InitMenuItem(child);
+			child->parent = &item;
+			InitMenuItem(*child);
 		}
 	}
 
 	void Menu::Draw(sf::RenderWindow& window, sf::Vector2f position, sf::Vector2f origin)
 	{
 		MenuItem& expandedItem = GetCurrentContext();
+
 		std::vector<sf::Text*> texts;
 		texts.reserve(expandedItem.children.size());
 		for (auto& child : expandedItem.children)
 		{
-			if (child.isEnabled)
+			if (child->isEnabled)
 			{
-				texts.push_back(&child.text);
+				texts.push_back(&child->text);
 			}
 		}
 
@@ -64,9 +65,10 @@ namespace ArkanoidGame
 			selectedItem->onPressCallback(*selectedItem);
 			return;
 		}
+
 		// default behaviour
 		if (!selectedItem->children.empty()) {
-			SelectMenuItem(selectedItem->children.front());
+			SelectMenuItem(*selectedItem->children.front());
 		}
 	}
 	
@@ -93,12 +95,12 @@ namespace ArkanoidGame
 
 		auto it = std::find_if(parent->children.begin(), parent->children.end(), [this](const auto& item)
 		{
-				return selectedItem == &item;
+				return selectedItem == item;
 		});
 
 		if (it != parent->children.begin())
 		{
-			SelectMenuItem(*std::prev(it));
+			SelectMenuItem(**std::prev(it));
 		}
 	}
 
@@ -108,18 +110,19 @@ namespace ArkanoidGame
 		{
 			return;
 		}
+
 		MenuItem* parent = selectedItem->parent;
 		assert(parent); // There always should be parent
 
 		auto it = std::find_if(parent->children.begin(), parent->children.end(), [this](const auto& item)
 		{
-				return selectedItem == &item;
+				return selectedItem == item;
 		});
 
 		it = std::next(it);
 		if (it != parent->children.end())
 		{
-			SelectMenuItem(*it);
+			SelectMenuItem(**it);
 		}
 		
 

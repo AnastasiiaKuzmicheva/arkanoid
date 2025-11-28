@@ -6,6 +6,7 @@
 namespace ArkanoidGame
 {
 	class Ball;
+	class GameBonus;
 
 	class Platform : public GameObject, public Collision
 	{
@@ -18,7 +19,14 @@ namespace ArkanoidGame
 		void OnHit() override {}
 		bool CheckCollision(std::shared_ptr<Collision> collision) override;
 
+		void SetWidth(float width)
+		{
+			multiplyWidth = width;
+			sprite.setScale(multiplyWidth, 1.f);
+		};
+
 	private:
 		void Move(float speed);
+		float multiplyWidth;
 	};
 }

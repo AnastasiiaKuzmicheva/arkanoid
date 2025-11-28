@@ -11,7 +11,7 @@ namespace
 namespace ArkanoidGame
 {
 	Block::Block(const sf::Vector2f& position, const sf::Color& color)
-		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
+		: GameObject(SETTINGS.TEXTURES_PATH + TEXTURE_ID + ".png", position, static_cast<float>(SETTINGS.PLATFORM_WIDTH), static_cast<float>(SETTINGS.PLATFORM_HEIGHT))
 	{
 		sprite.setColor(color);
 	}
@@ -28,6 +28,7 @@ namespace ArkanoidGame
 	void Block::OnHit()
 	{
 		hitCount = 0;
+		Emit();
 	}
 
 	bool Block::IsBroken()
@@ -74,17 +75,19 @@ namespace ArkanoidGame
 	void SmoothDestroyableBlock::OnHit()
 	{
 		isHit = true;
-		StartTimer(BREAK_DELAY);
+		ScoreValue = 10;
+		StartTimer(SETTINGS.BREAK_DELAY);
 	}
 
 	void SmoothDestroyableBlock::FinalAction()
 	{
 		--hitCount;
+		Emit();
 	}
 
 	void SmoothDestroyableBlock::EachTickAction(float deltaTime)
 	{
-		const float alphaDecay = 255.f * (deltaTime / BREAK_DELAY);
+		const float alphaDecay = 255.f * (deltaTime / SETTINGS.BREAK_DELAY);
 		if (color.a > alphaDecay)
 		{
 			color.a -= static_cast<sf::Uint8>(alphaDecay);
@@ -106,43 +109,37 @@ namespace ArkanoidGame
 	{
 		hitCount = 0;   //break emidetly
 	}
-	HeavyDestroyableBlock::HeavyDestroyableBlock(const sf::Vector2f& position, const sf::Color& color)
-		: Block(position, color)
-		, color(color)
+
+	ThreeHitBlock::ThreeHitBlock(const sf::Vector2f& position)
+		: SmoothDestroyableBlock(position, sf::Color::Red)
 	{
 		hitCount = 3;
+		ScoreValue = 50;
 	}
 
-	void HeavyDestroyableBlock::OnHit()
+	void ThreeHitBlock::OnHit()
 	{
-		if (hitCount > 2)
+		--hitCount;
+		StageChange();
+
+		if (hitCount == 0)
+		{
+			hitCount = 1;
+			isHit = true;
+			StartTimer(SETTINGS.BREAK_DELAY);
+		}
+	}
+
+	void ThreeHitBlock::StageChange()
+	{
+		if (hitCount == 2)
 		{
 			sprite.setColor(color.Yellow);
 		}
-		else if (hitCount > 1)
+		else if (hitCount == 1)
 		{
 			sprite.setColor(color.Green);
 		}
-		else
-		{
-			isHit = true;
-		}
-
-		StartTimer(BREAK_DELAY);
-	}
-
-	void HeavyDestroyableBlock::FinalAction()
-	{
-		--hitCount;
-	}
-
-	void HeavyDestroyableBlock::Update(float deltaTime)
-	{
-		UpdateTimer(deltaTime);
-	}
-
-	void HeavyDestroyableBlock::EachTickAction(float deltaTime)
-	{
 
 	}
 }

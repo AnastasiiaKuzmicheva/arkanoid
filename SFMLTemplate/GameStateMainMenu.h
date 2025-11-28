@@ -15,7 +15,30 @@ namespace ArkanoidGame
 		void Init() override;
 		void Update(float deltaTime) override;
 		void Draw(sf::RenderWindow& window) override;
+
 	private:
+
+		void UpdateDifficultyMenuItems();
+
+		MenuItem startGame;
+		MenuItem difficulty;
+		MenuItem options;
+		MenuItem records;
+		MenuItem exitGame;
+
+
+		MenuItem difficultyEasy;
+		MenuItem difficultyNormal;
+		MenuItem difficultyHard;
+		MenuItem difficultyInsane;
+		MenuItem difficultyImpossible;
+
+		MenuItem optionsSound;
+		MenuItem optionsMusic;
+
+		MenuItem mainMenu;
+		MenuItem yesItem;
+		MenuItem noItem;
 
 		sf::Font font;
 		Menu menu;

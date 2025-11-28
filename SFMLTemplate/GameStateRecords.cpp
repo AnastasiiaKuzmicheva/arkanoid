@@ -9,14 +9,14 @@ namespace ArkanoidGame
 {
 	void GameStateRecordsData::Init()
 	{
-		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
+		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
 
 		titleText.setString(L"Leadboard");
 		titleText.setFont(font);
 		titleText.setFillColor(sf::Color::Red);
 		titleText.setCharacterSize(30);
 
-		tableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
+		tableTexts.reserve(SETTINGS.MAX_RECORDS_TABLE_SIZE);
 
 		const Game& game = Application::Instance().GetGame();
 		std::map<int, std::string> sortedRecordsTable;
@@ -26,7 +26,7 @@ namespace ArkanoidGame
 		}
 
 		auto it = sortedRecordsTable.rbegin();
-		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it)
+		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it)
 		{
 			tableTexts.emplace_back(); // Create text in place
 			sf::Text& text = tableTexts.back();
@@ -74,7 +74,7 @@ namespace ArkanoidGame
 			textsList.push_back(&text);
 		}
 
-		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE; ++i)
+		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE; ++i)
 		{
 			tableTexts[i].setOrigin(GetTextOrigin(tableTexts[i], { 0.5f, 0.f }));
 			tableTexts[i].setPosition(window.getSize().x / 2.f, 150 + i * 50.f);

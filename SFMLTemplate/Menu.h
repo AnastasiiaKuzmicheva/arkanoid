@@ -24,7 +24,7 @@ namespace ArkanoidGame
 		sf::Color deselectedColor = sf::Color::White;
 
 		bool isEnabled = true;
-		std::vector<MenuItem> children;
+		std::vector<MenuItem*> children;
 
 		std::function<void(MenuItem& item)> onPressCallback;
 
