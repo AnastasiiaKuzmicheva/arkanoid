@@ -73,6 +73,7 @@ namespace ArkanoidGame
 
 	void SmoothDestroyableBlock::OnHit()
 	{
+		isHit = true;
 		StartTimer(BREAK_DELAY);
 	}
 
@@ -95,14 +96,53 @@ namespace ArkanoidGame
 		sprite.setColor(color);
 	}
 
-	UnbreackableBlock::UnbreackableBlock(const sf::Vector2f& position)
-		: Block(position, sf::Color::Blue)
+	GlassBlock::GlassBlock(const sf::Vector2f& position)
+		: Block(position, sf::Color::Cyan)  // like a glass
 	{
-
+		hitCount = 1;
 	}
 
-	void UnbreackableBlock::OnHit()
+	void GlassBlock::OnHit()
 	{
-		// Do nothing
+		hitCount = 0;   //break emidetly
+	}
+	HeavyDestroyableBlock::HeavyDestroyableBlock(const sf::Vector2f& position, const sf::Color& color)
+		: Block(position, color)
+		, color(color)
+	{
+		hitCount = 3;
+	}
+
+	void HeavyDestroyableBlock::OnHit()
+	{
+		if (hitCount > 2)
+		{
+			sprite.setColor(color.Yellow);
+		}
+		else if (hitCount > 1)
+		{
+			sprite.setColor(color.Green);
+		}
+		else
+		{
+			isHit = true;
+		}
+
+		StartTimer(BREAK_DELAY);
+	}
+
+	void HeavyDestroyableBlock::FinalAction()
+	{
+		--hitCount;
+	}
+
+	void HeavyDestroyableBlock::Update(float deltaTime)
+	{
+		UpdateTimer(deltaTime);
+	}
+
+	void HeavyDestroyableBlock::EachTickAction(float deltaTime)
+	{
+
 	}
 }

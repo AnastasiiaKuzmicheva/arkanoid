@@ -72,12 +72,19 @@ namespace ArkanoidGame
 					if ((!hasBrokeOneBlock) && block->CheckCollision(ball))
 					{
 						hasBrokeOneBlock = true;
-						const auto ballPos = ball->GetPosition();
-						const auto blockRect = block->GetRect();
 
-						GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+						auto glassBlock = std::dynamic_pointer_cast<GlassBlock>(block);
+						if (!glassBlock) {
+							const auto ballPos = ball->GetPosition();
+							const auto blockRect = block->GetRect();
 
-						score += 10;
+							GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+						}
+
+						if (block->isHit == true)
+						{
+							score += 10;
+						}
 
 					}
 					return block->IsBroken();
@@ -150,7 +157,21 @@ namespace ArkanoidGame
 				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f(x, y)));
 			}
 		}
-		
+
+		for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+		{
+			float x = BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+			float y = 100.f + row * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
+			blocks.emplace_back(std::make_shared<HeavyDestroyableBlock>(sf::Vector2f(x, y)));
+		}
+
+		for (int col = 0; col < 9; ++col)
+		{
+			float startX = (SCREEN_WIDTH - 8 * (BLOCK_WIDTH + BLOCK_SHIFT)) / 2.f;
+			float x = startX + col * (BLOCK_WIDTH + BLOCK_SHIFT);
+			float y = 100.f + (row + 1) * (BLOCK_HEIGHT + BLOCK_VERTICAL_MARGIN);
+			blocks.emplace_back(std::make_shared<GlassBlock>(sf::Vector2f(x, y)));
+		}
 	}
 
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY)

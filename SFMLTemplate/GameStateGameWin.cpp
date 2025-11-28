@@ -44,9 +44,9 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateGameWinData::Update(float timeDelta)
+	void GameStateGameWinData::Update(float deltaTime)
 	{
-		timeSinceGameWin += timeDelta;
+		timeSinceGameWin += deltaTime;
 
 		sf::Color GameWinTextColor = (int)timeSinceGameWin % 2 ? sf::Color::Green : sf::Color::Yellow;
 		gameWinText.setFillColor(GameWinTextColor);

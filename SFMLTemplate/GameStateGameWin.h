@@ -12,7 +12,7 @@ namespace ArkanoidGame
 
 		void Init() override;
 		void HandleWindowEvent(const sf::Event& event) override;
-		void Update(float timeDelta) override;
+		void Update(float deltaTime) override;
 		void Draw(sf::RenderWindow& window) override;
 
 	private:
