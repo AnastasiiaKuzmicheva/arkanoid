@@ -38,31 +38,46 @@ namespace ArkanoidGame
 	class Game
 	{
 	public:
+
+		void StartGame();
+		void PauseGame();
+		void WinGame();
+		void LooseGame();
+		void UpdateGame(float timeDelta, sf::RenderWindow& window);
+		void ExitGame();
+		void QuitGame();
+		void ShowRecords();
+		void LoadNextLevel();
+
+	public:
 		using RecordsTable = std::unordered_map<std::string, int>;
 		Game();
 		~Game();
-		void HandleWindowEvents(sf::RenderWindow& window);
-		bool Update(float deltaTime);
-		void Draw(sf::RenderWindow& window);
-		void Shutdown();
 
 		void SetOption(GameOptions option, bool value);
-		void SetDifficultyLevel(DifficultyLevel level, bool value);
+		void SetDifficultyLevel(DifficultyLevel level);
 		bool IsEnableOptions(GameOptions option);
 		bool IsEnableDifficultyLevel(DifficultyLevel level);
 
 		const RecordsTable& GetRecordsTable() const { return recordsTable; }
 		int GetRecordByPlayerId(const std::string& playerId) const;
+		// Remove current game state from the stack
+		void PopState();
 		void UpdateRecord(const std::string& playerId, int score);
+	
+	private:
 
 		// Add new game state on top of the stack
 		void PushState(GameStateType stateType, bool isExclusivelyVisible);
 
-		// Remove current game state from the stack
-		void PopState();
-
 		// Remove all game states from the stack and add new one
 		void SwitchStateTo(GameStateType newState);
+
+		void Shutdown();
+	
+		void HandleWindowEvents(sf::RenderWindow& window);
+		bool Update(float deltaTime);
+		void Draw(sf::RenderWindow& window);
 
 	private:
 

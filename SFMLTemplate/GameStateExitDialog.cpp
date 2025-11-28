@@ -7,7 +7,7 @@ namespace ArkanoidGame
 {
 	void GameStateExitDialogData::Init()
 	{
-		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
+		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
 
 		hintText.setString(L"Are you sure you wanna quit? Enter - yes, Esc - no");
 		hintText.setFont(font);
@@ -28,7 +28,7 @@ namespace ArkanoidGame
 			}
 			else if (event.key.code == sf::Keyboard::Enter)
 			{
-				Application::Instance().GetGame().SwitchStateTo(GameStateType::MainMenu);
+				Application::Instance().GetGame().ExitGame();
 			}
 		}
 	}

@@ -10,7 +10,7 @@ namespace ArkanoidGame
 
 	void GameStateGameOverData::Init()
 	{
-		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
+		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
 
 		timeSinceGameOver = 0.f;
 
@@ -27,7 +27,7 @@ namespace ArkanoidGame
 		hintText.setString(L"Press SPACE to restart game");
 		hintText.setOrigin(GetTextOrigin(hintText, { 0.5f, 1.f }));
 
-		recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
+		recordsTableTexts.reserve(SETTINGS.MAX_RECORDS_TABLE_SIZE);
 
 		std::multimap<int, std::string> sortedRecordsTable;
 		Game& game = Application::Instance().GetGame();
@@ -39,7 +39,7 @@ namespace ArkanoidGame
 		bool isPlayerInTable = false;
 
 		auto it = sortedRecordsTable.rbegin();
-		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it) // Note, we can do several actions in for action block
+		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it) // Note, we can do several actions in for action block
 		{
 			recordsTableTexts.emplace_back(); // Create text in place
 			sf::Text& text = recordsTableTexts.back();
@@ -67,7 +67,7 @@ namespace ArkanoidGame
 			sf::Text& text = recordsTableTexts.back();
 			std::stringstream sstream;
 			int playerScores = game.GetRecordByPlayerId(PLAYER_NAME);
-			sstream << MAX_RECORDS_TABLE_SIZE << ". " << PLAYER_NAME << ": " << playerScores;
+			sstream << SETTINGS.MAX_RECORDS_TABLE_SIZE << ". " << PLAYER_NAME << ": " << playerScores;
 			text.setString(sstream.str());
 			text.setFillColor(sf::Color::Green);
 		}
@@ -79,11 +79,11 @@ namespace ArkanoidGame
 		{
 			if (event.key.code == sf::Keyboard::Space)
 			{
-				Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
+				Application::Instance().GetGame().StartGame();
 			}
 			else if (event.key.code == sf::Keyboard::Escape)
 			{
-				Application::Instance().GetGame().SwitchStateTo(GameStateType::MainMenu);
+				Application::Instance().GetGame().ExitGame();
 			}
 		}
 	}
@@ -111,7 +111,7 @@ namespace ArkanoidGame
 			textsList.push_back(&text);
 		}
 
-		for (int i = 0; i < MAX_RECORDS_TABLE_SIZE; ++i)
+		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE; ++i)
 		{
 			recordsTableTexts[i].setOrigin(GetTextOrigin(recordsTableTexts[i], { 0.5f, 0.f }));
 			recordsTableTexts[i].setPosition(window.getSize().x / 2.f, 200 + i * 50.f);

@@ -61,6 +61,15 @@
     <ClCompile Include="Arkanoid.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="BlockFactory.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBonus.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -124,6 +133,21 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="GameSettings.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockFactory.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLoader.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBonus.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

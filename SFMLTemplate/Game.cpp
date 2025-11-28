@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <cassert>
 #include <algorithm>
+#include "GameStatePlaying.h"
 
 namespace ArkanoidGame
 {
@@ -25,6 +26,26 @@ namespace ArkanoidGame
 	Game::~Game()
 	{
 		Shutdown();
+	}
+
+	void Game::UpdateGame(float deltaTime, sf::RenderWindow& window)
+	{
+		HandleWindowEvents(window);
+		if (Update(deltaTime))
+		{
+			// Draw everything here
+			// Clear the window first
+			window.clear();
+
+			Draw(window);
+
+			// End the current frame, display window contents on screen
+			window.display();
+		}
+		else
+		{
+			window.close();
+		}
 	}
 
 
@@ -152,16 +173,9 @@ namespace ArkanoidGame
 
 	}
 
-	void Game::SetDifficultyLevel(DifficultyLevel level, bool value)
+	void Game::SetDifficultyLevel(DifficultyLevel level)
 	{
-		if (value)
-		{
-			difficulty = level;
-		}
-		else
-		{
-			difficulty = (DifficultyLevel)((std::uint8_t)difficulty & ~(std::uint8_t)level);
-		}
+		difficulty = level;
 	}
 
 	bool Game::IsEnableOptions(GameOptions option)
@@ -185,5 +199,47 @@ namespace ArkanoidGame
 	void Game::UpdateRecord(const std::string& playerId, int score)
 	{
 		recordsTable[playerId] = std::max(recordsTable[playerId], score);
+	}
+
+	void Game::ShowRecords()
+	{
+		PushState(GameStateType::Records, true);
+	}
+
+	void Game::QuitGame()
+	{
+		SwitchStateTo(GameStateType::None);
+	}
+
+	void Game::ExitGame()
+	{
+		SwitchStateTo(GameStateType::MainMenu);
+	}
+
+	void Game::StartGame()
+	{
+		SwitchStateTo(GameStateType::Playing);
+	}
+
+	void Game::PauseGame()
+	{
+		PushState(GameStateType::ExitDialog, false);
+	}
+
+	void Game::WinGame()
+	{
+		PushState(GameStateType::GameWin, false);
+	}
+
+	void Game::LooseGame()
+	{
+		PushState(GameStateType::GameOver, false);
+	}
+
+	void Game::LoadNextLevel()
+	{
+		assert(stateStack.back().GetType() == GameStateType::Playing);
+		auto playingData = (stateStack.back().GetData<GameStatePlayingData>());
+		playingData->LoadNextLevel();
 	}
 }

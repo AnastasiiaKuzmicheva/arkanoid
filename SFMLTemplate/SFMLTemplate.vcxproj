@@ -162,7 +162,9 @@
     <ClCompile Include="Arkanoid.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockFactory.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameBonus.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateData.cpp" />
@@ -170,8 +172,11 @@
     <ClCompile Include="GameStateGameOver.cpp" />
     <ClCompile Include="GameStateGameWin.cpp" />
     <ClCompile Include="GameStateMainMenu.cpp" />
-    <ClCompile Include="GameStatePlaying.cpp" />
+    <ClCompile Include="GameStatePlaying.cpp">
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp17</LanguageStandard>
+    </ClCompile>
     <ClCompile Include="GameStateRecords.cpp" />
+    <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Platform.cpp" />
@@ -181,9 +186,11 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockFactory.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="DelayedAction.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameBonus.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="GameState.h" />
@@ -194,10 +201,13 @@
     <ClInclude Include="GameStateMainMenu.h" />
     <ClInclude Include="GameStatePlaying.h" />
     <ClInclude Include="GameStateRecords.h" />
+    <ClInclude Include="IObserver.h" />
+    <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Randomizer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Sprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
